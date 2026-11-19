@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FrameMark – Millisecond Video Review &amp; Frame-by-Frame Annotation Tool</title>
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="FrameMark – Millisecond Video Review &amp; Frame-by-Frame Annotation Tool">
+  <meta name="description" content="Review local videos frame by frame with millisecond precision. Pin markup, arrows, highlights, and comments to exact timestamps. Export annotated frames with burned-in timecodes.">
+  <meta name="keywords" content="video review tool, frame by frame video player, video annotation, video markup, frame accurate player, millisecond timestamp, video critique, animation review, sports analysis video, vfx review">
+  <meta name="author" content="FrameMark">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="./framemark.html">
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:site_name" content="FrameMark">
+  <meta property="og:title" content="FrameMark – Millisecond Video Review &amp; Frame-by-Frame Annotation Tool">
+  <meta property="og:description" content="Free, private in-browser video review. Step through videos frame by frame, draw arrows, boxes, and text notes on exact millisecond timestamps.">
+  <meta property="og:url" content="./framemark.html">
+  <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630' width='1200' height='630'%3E%3Crect width='1200' height='630' fill='%230b0d11'/%3E%3Crect x='100' y='100' width='120' height='120' rx='28' fill='%23c9f36b'/%3E%3Cpath d='M136 128h58v18h-38v14h32v18h-32v22H136z' fill='%2311160b'/%3E%3Ctext x='260' y='185' font-family='sans-serif' font-size='60' font-weight='800' fill='%23f1f4f7'%3EFrameMark%3C/text%3E%3Ctext x='100' y='320' font-family='sans-serif' font-size='38' font-weight='600' fill='%23c9f36b'%3EMillisecond Video Review &amp; Annotation%3C/text%3E%3Ctext x='100' y='380' font-family='sans-serif' font-size='26' fill='%238d98a7'%3EFrame-by-frame precision %E2%80%A2 Visual markup tools %E2%80%A2 Timestamp pinning%3C/text%3E%3Ctext x='100' y='430' font-family='sans-serif' font-size='26' fill='%238d98a7'%3E100%25 private client-side review %E2%80%A2 Export annotated stills%3C/text%3E%3C/svg%3E">
+  <meta property="og:image:alt" content="FrameMark video review and annotation software interface">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FrameMark – Millisecond Video Review &amp; Annotation Tool">
+  <meta name="twitter:description" content="Step frame-by-frame through videos, draw notes and arrows on exact timestamps, and export frames with burned-in timecodes.">
+  <meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630' width='1200' height='630'%3E%3Crect width='1200' height='630' fill='%230b0d11'/%3E%3Crect x='100' y='100' width='120' height='120' rx='28' fill='%23c9f36b'/%3E%3Cpath d='M136 128h58v18h-38v14h32v18h-32v22H136z' fill='%2311160b'/%3E%3Ctext x='260' y='185' font-family='sans-serif' font-size='60' font-weight='800' fill='%23f1f4f7'%3EFrameMark%3C/text%3E%3Ctext x='100' y='320' font-family='sans-serif' font-size='38' font-weight='600' fill='%23c9f36b'%3EMillisecond Video Review &amp; Annotation%3C/text%3E%3Ctext x='100' y='380' font-family='sans-serif' font-size='26' fill='%238d98a7'%3EFrame-by-frame precision %E2%80%A2 Visual markup tools %E2%80%A2 Timestamp pinning%3C/text%3E%3Ctext x='100' y='430' font-family='sans-serif' font-size='26' fill='%238d98a7'%3E100%25 private client-side review %E2%80%A2 Export annotated stills%3C/text%3E%3C/svg%3E">
+
+  <!-- Schema.org JSON-LD Structured Data: WebApplication & FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "FrameMark",
+        "url": "./framemark.html",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires modern browser with HTML5 Video and Canvas support",
+        "description": "High-precision frame-by-frame video review and visual annotation web application. Load local video files, step through frames at arbitrary frame rates, and draw vector annotations anchored to millisecond timestamps.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "Frame-by-frame video navigation with configurable FPS (1-240 FPS)",
+          "Millisecond timecode display and direct time scrubbing",
+          "Visual markup tools: arrows, bounding boxes, ellipses, highlights, freehand pen, and text labels",
+          "Timestamp pinning with visual timeline marker ticks",
+          "Export annotated stills with optional burned-in timecode overlay",
+          "Project save and load via local JSON files",
+          "100% client-side privacy with zero server uploads"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I review a video frame-by-frame with FrameMark?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Open any local video file by pressing 'O' or clicking 'Load video'. Use the Left and Right arrow keys to step backward or forward by exactly one frame, or Shift + Arrow keys to jump by one second. You can also customize the FPS to match your video source."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does FrameMark upload my videos to the cloud?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. FrameMark processes and plays your video files entirely within your local browser sandbox using the HTML5 Video API. No video data or annotations are ever transferred over the network."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I export annotations and timestamps?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. You can export any marked-up frame as an image with the exact millisecond timecode burned in, or save your entire annotation review project as a JSON file to share or resume later."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23c9f36b'/%3E%3Cpath d='M18 14h29v9H28v7h16v9H28v11H18z' fill='%2311160b'/%3E%3C/svg%3E">
+  <style>
+    :root { color-scheme: dark; --bg:#0b0d11; --panel:#12161c; --panel-2:#171c23; --panel-3:#1c232d; --line:#2b3440; --muted:#8d98a7; --text:#f1f4f7; --lime:#c9f36b; --cyan:#7dd3fc; --danger:#fb7185; --shadow:0 18px 60px rgba(0,0,0,.35); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    html, body { min-width:320px; min-height:100%; margin:0; background:var(--bg); color:var(--text); }
+    body { min-height:100vh; overflow-x:hidden; }
+    button, input, select { font:inherit; }
+    button { cursor:pointer; }
+    button:focus-visible, input:focus-visible { outline:2px solid var(--cyan); outline-offset:1px; }
+    .app-shell { min-height:100vh; display:grid; grid-template-rows:60px 1fr; }
+    .topbar { display:flex; align-items:center; gap:16px; padding:0 22px; border-bottom:1px solid var(--line); background:rgba(11,13,17,.86); backdrop-filter:blur(18px); }
+    .brand { display:flex; align-items:center; gap:10px; min-width:175px; font-weight:750; letter-spacing:-.02em; }
+    .brand-mark { width:28px; height:28px; display:grid; place-items:center; border-radius:8px; background:var(--lime); color:#13170c; font-weight:900; }
+    .topbar-copy, .status { color:var(--muted); font-size:12px; }
+    .topbar-spacer { flex:1; }
+    .status { white-space:nowrap; }
+    .workspace { display:grid; grid-template-columns:minmax(0,1fr) 318px; min-height:0; }
+    .main-column { min-width:0; display:grid; grid-template-rows:minmax(0,1fr) auto; }
+    .viewer-area { min-height:0; padding:20px 22px 16px; display:grid; place-items:center; background:radial-gradient(circle at 50% 38%, rgba(66,83,103,.11), transparent 46%); }
+    /* width is capped by viewport height so the stage + controls always fit */
+    .viewer-stage { position:relative; width:min(100%, 1120px, calc((100vh - 210px) * 16 / 9)); aspect-ratio:16/9; overflow:hidden; border:1px solid var(--line); border-radius:14px; background:#050608; box-shadow:var(--shadow); }
+    .viewer-stage.has-video { border-color:#3a4654; }
+    #video { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#050608; }
+    #overlay { position:absolute; inset:0; width:100%; height:100%; touch-action:none; }
+    .timestamp-badge { position:absolute; z-index:2; top:12px; left:12px; display:none; padding:5px 8px; border:1px solid rgba(201,243,107,.35); border-radius:6px; background:rgba(6,9,12,.78); color:var(--lime); font:12px ui-monospace, SFMono-Regular, Consolas, monospace; font-variant-numeric:tabular-nums; pointer-events:none; }
+    .empty-state { position:absolute; inset:0; display:grid; place-items:center; padding:30px; text-align:center; pointer-events:none; }
+    .empty-state-inner { max-width:350px; }
+    .empty-icon { width:58px; height:58px; margin:0 auto 16px; display:grid; place-items:center; border:1px solid #34404e; border-radius:16px; color:var(--lime); background:#131820; font-size:25px; }
+    .empty-state h1 { margin:0 0 8px; font-size:22px; letter-spacing:-.03em; }
+    .empty-state p { margin:0; color:var(--muted); font-size:13px; line-height:1.6; }
+    .empty-state kbd { padding:2px 6px; border:1px solid #3a4654; border-radius:5px; background:#171c23; color:var(--text); font-size:11px; }
+    .viewer-stage.drag { border-color:var(--lime); }
+    .transport { padding:0 22px 18px; }
+    .timeline-wrap { position:relative; height:28px; display:flex; align-items:center; }
+    .timeline-track { position:absolute; left:0; right:0; height:5px; border-radius:99px; background:#2a323c; }
+    .timeline-progress { position:absolute; left:0; height:5px; border-radius:99px; background:var(--lime); pointer-events:none; }
+    #timeline { position:relative; z-index:1; width:100%; margin:0; accent-color:var(--lime); background:transparent; }
+    .annotation-ticks { position:absolute; inset:0; pointer-events:none; }
+    .annotation-tick { position:absolute; top:7px; width:2px; height:14px; transform:translateX(-1px); background:var(--cyan); box-shadow:0 0 8px rgba(125,211,252,.6); }
+    .transport-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:3px; }
+    .time-readout { display:flex; align-items:center; gap:6px; min-width:200px; color:var(--muted); font-size:13px; font-variant-numeric:tabular-nums; }
+    #time-input { width:12ch; height:32px; padding:0 6px; border:1px solid transparent; border-radius:7px; background:transparent; color:var(--text); font:600 14px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    #time-input:hover, #time-input:focus { border-color:var(--line); background:var(--panel-2); }
+    .play-button { width:36px; height:32px; display:grid; place-items:center; border:0; border-radius:8px; background:var(--lime); color:#11160b; font-size:15px; }
+    .control-button, .file-button { min-height:32px; padding:0 10px; border:1px solid var(--line); border-radius:8px; background:var(--panel-2); color:var(--text); font-size:12px; }
+    .control-button:hover, .file-button:hover { border-color:#516071; background:var(--panel-3); }
+    .file-button { display:inline-flex; align-items:center; gap:7px; cursor:pointer; }
+    .file-button input { display:none; }
+    .transport-spacer { flex:1; }
+    .fps-control { display:flex; align-items:center; gap:7px; color:var(--muted); font-size:12px; }
+    .fps-control input { width:66px; height:30px; padding:0 7px; border:1px solid var(--line); border-radius:7px; background:var(--panel-2); color:var(--text); }
+    .sidebar { min-height:0; overflow:auto; border-left:1px solid var(--line); background:var(--panel); }
+    .sidebar-section { padding:20px 18px; border-bottom:1px solid var(--line); }
+    .section-label { margin:0 0 11px; color:var(--muted); font-size:10px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    .sidebar h2 { margin:0 0 5px; font-size:16px; letter-spacing:-.02em; }
+    .sidebar-copy { margin:0 0 15px; color:var(--muted); font-size:12px; line-height:1.55; }
+    .tool-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+    .tool-button { min-height:60px; padding:8px 2px; border:1px solid var(--line); border-radius:9px; background:var(--panel-2); color:var(--muted); font-size:11px; }
+    .tool-button:hover { color:var(--text); border-color:#526171; }
+    .tool-button.active { border-color:var(--lime); background:rgba(201,243,107,.1); color:var(--lime); }
+    .tool-icon { display:block; margin-bottom:5px; font-size:19px; line-height:1; }
+    .color-row { display:flex; gap:9px; align-items:center; margin-top:12px; color:var(--muted); font-size:12px; }
+    .color-row input { width:34px; height:28px; padding:2px; border:1px solid var(--line); border-radius:6px; background:var(--panel-2); }
+    .range-row { margin-top:12px; color:var(--muted); font-size:12px; }
+    .range-row label { display:flex; justify-content:space-between; margin-bottom:6px; }
+    .range-row output { color:var(--text); font-variant-numeric:tabular-nums; }
+    .range-row input[type=range] { width:100%; accent-color:var(--lime); }
+    .annotation-list { display:grid; gap:7px; }
+    .annotation-card { position:relative; padding:9px 29px 9px 10px; border:1px solid var(--line); border-radius:8px; background:var(--panel-2); cursor:pointer; }
+    .annotation-card:hover, .annotation-card.selected { border-color:var(--cyan); }
+    .annotation-card-title { display:flex; gap:7px; align-items:center; font-size:12px; overflow:hidden; }
+    .annotation-card-title span:last-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .annotation-card-time { color:var(--cyan); font:11px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .annotation-card-meta { margin-top:4px; color:var(--muted); font-size:11px; }
+    .delete-annotation { position:absolute; top:7px; right:7px; padding:3px; border:0; background:transparent; color:var(--muted); }
+    .delete-annotation:hover { color:var(--danger); }
+    .empty-list { padding:16px 5px; color:var(--muted); font-size:12px; line-height:1.5; }
+    .button-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .button-row button { flex:1; }
+    .button-primary { min-height:34px; padding:0 10px; border:0; border-radius:8px; background:var(--lime); color:#11160b; font-size:12px; font-weight:750; }
+    .button-secondary { min-height:34px; padding:0 10px; border:1px solid var(--line); border-radius:8px; background:var(--panel-2); color:var(--text); font-size:12px; }
+    .button-primary:disabled, .button-secondary:disabled { opacity:.45; cursor:not-allowed; }
+    .check-row { display:flex; align-items:center; gap:8px; margin:0 0 12px; color:var(--muted); font-size:12px; }
+    .check-row input { accent-color:var(--lime); }
+    .shortcut-list { display:grid; gap:7px; color:var(--muted); font-size:11px; }
+    .shortcut { display:flex; justify-content:space-between; gap:12px; }
+    .shortcut kbd { color:var(--text); }
+    .text-editor { position:absolute; z-index:5; display:none; width:245px; padding:10px; border:1px solid #4b5a6b; border-radius:9px; background:#11161d; box-shadow:var(--shadow); }
+    .text-editor.open { display:block; }
+    .text-editor input { width:100%; height:32px; padding:0 8px; border:1px solid var(--line); border-radius:6px; background:#0c1015; color:var(--text); outline:none; }
+    .text-editor input:focus { border-color:var(--lime); }
+    .text-editor-actions { display:flex; gap:6px; margin-top:8px; }
+    .text-editor-actions button { flex:1; min-height:28px; border-radius:6px; font-size:11px; }
+    .text-editor-actions .add { border:0; background:var(--lime); color:#11160b; }
+    .text-editor-actions .cancel { border:1px solid var(--line); background:transparent; color:var(--text); }
+    @media (max-width:840px) {
+      .workspace { grid-template-columns:1fr; }
+      .sidebar { border-top:1px solid var(--line); border-left:0; }
+      .viewer-stage { width:min(100%, 1120px); }
+      .topbar-copy, .status { display:none; }
+    }
+    @media (max-width:520px) {
+      .topbar { padding:0 14px; }
+      .viewer-area, .transport { padding-left:12px; padding-right:12px; }
+      .transport-spacer { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">F</span><span>FrameMark</span></div>
+      <div class="topbar-copy">Millisecond video review &amp; annotation</div>
+      <div class="topbar-spacer"></div>
+      <div class="status" id="status">No video loaded</div>
+    </header>
+
+    <main class="workspace">
+      <section class="main-column">
+        <div class="viewer-area">
+          <div class="viewer-stage" id="stage">
+            <video id="video" preload="metadata" playsinline aria-label="Video playback viewport"></video>
+            <canvas id="overlay" role="img" aria-label="Video markup and annotation canvas overlay"></canvas>
+            <div class="timestamp-badge" id="timestamp-badge">00:00:00.000</div>
+            <div class="empty-state" id="empty-state">
+              <div class="empty-state-inner">
+                <div class="empty-icon">▶</div>
+                <h1>Drop in a video to start reviewing</h1>
+                <p>Load a local video, step through it frame by frame, and pin markup to the exact moment it appears. Press <kbd>O</kbd> to open a file.</p>
+              </div>
+            </div>
+            <div class="text-editor" id="text-editor">
+              <input id="text-input" type="text" maxlength="120" placeholder="Type annotation text…" autocomplete="off">
+              <div class="text-editor-actions"><button class="add" id="add-text" type="button">Add text</button><button class="cancel" id="cancel-text" type="button">Cancel</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="transport">
+          <div class="timeline-wrap">
+            <div class="timeline-track"></div>
+            <div class="timeline-progress" id="timeline-progress"></div>
+            <div class="annotation-ticks" id="annotation-ticks"></div>
+            <input id="timeline" type="range" min="0" max="0" step="any" value="0" aria-label="Video timeline">
+          </div>
+          <div class="transport-row">
+            <button class="play-button" id="play" type="button" aria-label="Play or pause">▶</button>
+            <div class="time-readout"><input id="time-input" type="text" value="00:00:00.000" spellcheck="false" title="Type a time (e.g. 1:23.456) and press Enter" aria-label="Current time, editable"> <span>/ <span id="duration">00:00:00.000</span></span></div>
+            <button class="control-button" id="back-sec" type="button" title="Back 1 second (Shift+Left)">−1s</button>
+            <button class="control-button" id="back-frame" type="button" title="Previous frame (Left)">◀ Frame</button>
+            <button class="control-button" id="forward-frame" type="button" title="Next frame (Right)">Frame ▶</button>
+            <button class="control-button" id="forward-sec" type="button" title="Forward 1 second (Shift+Right)">+1s</button>
+            <div class="transport-spacer"></div>
+            <label class="fps-control" for="fps">FPS <input id="fps" type="number" min="1" max="240" step="any" value="30"></label>
+            <label class="file-button">＋ Load video<input id="file-input" type="file" accept="video/*"></label>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="sidebar-section">
+          <p class="section-label">01 / Mark up this frame</p>
+          <h2>Annotation tools</h2>
+          <p class="sidebar-copy">Choose a tool, then drag on the video. Every mark is stored against the exact timestamp of the frame.</p>
+          <div class="tool-grid" id="tool-grid">
+            <button class="tool-button active" data-tool="select" type="button"><span class="tool-icon">⌁</span>Select</button>
+            <button class="tool-button" data-tool="arrow" type="button"><span class="tool-icon">↗</span>Arrow</button>
+            <button class="tool-button" data-tool="rect" type="button"><span class="tool-icon">□</span>Box</button>
+            <button class="tool-button" data-tool="ellipse" type="button"><span class="tool-icon">○</span>Ellipse</button>
+            <button class="tool-button" data-tool="highlight" type="button"><span class="tool-icon">▱</span>Highlight</button>
+            <button class="tool-button" data-tool="pen" type="button"><span class="tool-icon">✎</span>Pen</button>
+            <button class="tool-button" data-tool="text" type="button"><span class="tool-icon">T</span>Text</button>
+          </div>
+          <div class="color-row"><label for="color">Ink color</label><input id="color" type="color" value="#c9f36b"><span id="color-value">#C9F36B</span></div>
+          <div class="range-row"><label for="stroke-width"><span>Stroke width</span><output id="stroke-width-value">4 px</output></label><input id="stroke-width" type="range" min="1" max="16" step="1" value="4"></div>
+          <div class="range-row"><label for="opacity"><span>Opacity</span><output id="opacity-value">100%</output></label><input id="opacity" type="range" min="10" max="100" step="1" value="100"></div>
+        </section>
+
+        <section class="sidebar-section">
+          <p class="section-label">02 / Pins on this video</p>
+          <div class="annotation-list" id="annotation-list"></div>
+        </section>
+
+        <section class="sidebar-section">
+          <p class="section-label">03 / Project</p>
+          <label class="check-row"><input type="checkbox" id="stamp" checked> Burn timestamp into exported frames</label>
+          <div class="button-row"><button class="button-primary" id="export-frame" type="button" disabled>Export frame</button><button class="button-secondary" id="copy-frame" type="button" disabled>Copy frame</button><button class="button-secondary" id="save-project" type="button">Save project</button><button class="button-secondary" id="load-project" type="button">Load project</button><input id="project-input" type="file" accept="application/json" hidden></div>
+        </section>
+
+        <section class="sidebar-section">
+          <p class="section-label">Shortcuts</p>
+          <div class="shortcut-list">
+            <div class="shortcut"><span>Play / pause</span><kbd>Space</kbd></div>
+            <div class="shortcut"><span>Previous / next frame</span><kbd>← / →</kbd></div>
+            <div class="shortcut"><span>Back / forward 1 s</span><kbd>Shift + ← / →</kbd></div>
+            <div class="shortcut"><span>Open video</span><kbd>O</kbd></div>
+            <div class="shortcut"><span>Delete selected</span><kbd>Backspace</kbd></div>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      const video = $('video'), stage = $('stage'), overlay = $('overlay'), ctx = overlay.getContext('2d');
+      const state = { videoUrl:null, filename:'', tool:'select', color:'#c9f36b', strokeWidth:4, opacity:1, fps:30, fpsLocked:false, t:0, annotations:[], selectedId:null, drawing:null, dragging:null, pendingText:null };
+      const typeNames = { arrow:'Arrow', rect:'Box', ellipse:'Ellipse', highlight:'Highlight', pen:'Pen', text:'Text' };
+      const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+      const uid = () => `a-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      const pad = (n, w = 2) => String(n).padStart(w, '0');
+      const hasRVFC = 'requestVideoFrameCallback' in HTMLVideoElement.prototype;
+
+      function formatTime(seconds) {
+        const msTotal = Math.max(0, Math.round((Number(seconds) || 0) * 1000));
+        const ms = msTotal % 1000, ts = Math.floor(msTotal / 1000);
+        return `${pad(Math.floor(ts / 3600))}:${pad(Math.floor(ts / 60) % 60)}:${pad(ts % 60)}.${pad(ms, 3)}`;
+      }
+      function parseTime(text) {
+        const parts = text.trim().split(':').map(Number);
+        if (!parts.length || parts.length > 3 || parts.some((n) => !Number.isFinite(n) || n < 0)) return NaN;
+        return parts.reduce((acc, n) => acc * 60 + n, 0);
+      }
+      const frameStep = () => 1 / Math.max(1, state.fps);
+      const frameIndex = (t) => Math.round(t * state.fps);
+      const setStatus = (text) => { $('status').textContent = text; };
+
+      /* ---------- geometry ---------- */
+      function getVideoRect() {
+        const s = stage.getBoundingClientRect();
+        if (!video.videoWidth || !video.videoHeight) return { left:0, top:0, width:s.width, height:s.height };
+        const scale = Math.min(s.width / video.videoWidth, s.height / video.videoHeight);
+        const width = video.videoWidth * scale, height = video.videoHeight * scale;
+        return { left:(s.width - width) / 2, top:(s.height - height) / 2, width, height };
+      }
+      function resizeCanvas() {
+        const rect = stage.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+        overlay.width = Math.max(1, Math.round(rect.width * dpr));
+        overlay.height = Math.max(1, Math.round(rect.height * dpr));
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        render();
+      }
+      function pointerToNorm(e) {
+        const b = stage.getBoundingClientRect(), r = getVideoRect();
+        return { x: clamp((e.clientX - b.left - r.left) / r.width, 0, 1), y: clamp((e.clientY - b.top - r.top) / r.height, 0, 1) };
+      }
+      const pointsOf = (a) => a.pts && a.pts.length ? a.pts : [a.start, a.end || a.start];
+      function annotationBounds(a) {
+        if (a.type === 'text') {
+          const w = clamp((a.text || '').length * .018, .05, .5);
+          return { left:a.start.x, top:clamp(a.start.y - .075, 0, 1), right:clamp(a.start.x + w, 0, 1), bottom:a.start.y };
+        }
+        const p = pointsOf(a), xs = p.map((q) => q.x), ys = p.map((q) => q.y);
+        return { left:Math.min(...xs), top:Math.min(...ys), right:Math.max(...xs), bottom:Math.max(...ys) };
+      }
+      function segDist(p, a, b) {
+        const dx = b.x - a.x, dy = b.y - a.y;
+        if (!dx && !dy) return Math.hypot(p.x - a.x, p.y - a.y);
+        const t = clamp(((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy), 0, 1);
+        return Math.hypot(p.x - (a.x + t * dx), p.y - (a.y + t * dy));
+      }
+      function hitTest(a, p) {
+        const pad = .035 + (a.strokeWidth || 4) / 2000;
+        if (a.type === 'arrow') return segDist(p, a.start, a.end || a.start) <= pad;
+        if (a.type === 'pen') { const pts = pointsOf(a); return pts.some((q, i) => segDist(p, q, pts[i + 1] || q) <= pad); }
+        const b = annotationBounds(a);
+        if (a.type === 'ellipse') {
+          const cx = (b.left + b.right) / 2, cy = (b.top + b.bottom) / 2, rx = Math.max(.001, (b.right - b.left) / 2 + pad), ry = Math.max(.001, (b.bottom - b.top) / 2 + pad);
+          return ((p.x - cx) / rx) ** 2 + ((p.y - cy) / ry) ** 2 <= 1.2;
+        }
+        return p.x >= b.left - pad && p.x <= b.right + pad && p.y >= b.top - pad && p.y <= b.bottom + pad;
+      }
+      const isVisible = (a) => Math.abs(state.t - a.time) <= frameStep() * 0.5 + 0.0005;
+      const findAt = (p) => [...state.annotations].reverse().find((a) => isVisible(a) && hitTest(a, p));
+      function moveAnnotation(a, o, d) {
+        const pts = o.pts || [o.start, ...(o.end ? [o.end] : [])];
+        const dx = clamp(d.x, -Math.min(...pts.map((q) => q.x)), 1 - Math.max(...pts.map((q) => q.x)));
+        const dy = clamp(d.y, -Math.min(...pts.map((q) => q.y)), 1 - Math.max(...pts.map((q) => q.y)));
+        const sh = (q) => ({ x: q.x + dx, y: q.y + dy });
+        a.start = sh(o.start);
+        if (o.end) a.end = sh(o.end);
+        if (o.pts) a.pts = o.pts.map(sh);
+      }
+
+      /* ---------- painting: one routine for preview AND export ---------- */
+      // (ox, oy, W, H) = where the video frame sits on this canvas. Sizes scale with W so both outputs match.
+      function paint(c, a, ox, oy, W, H) {
+        const k = W / 1000, P = (q) => ({ x: ox + q.x * W, y: oy + q.y * H });
+        const s = P(a.start), e = P(a.end || a.start);
+        c.save();
+        c.globalAlpha = a.opacity ?? 1; c.strokeStyle = c.fillStyle = a.color;
+        c.lineWidth = (a.strokeWidth || 4) * k * 1.2; c.lineCap = c.lineJoin = 'round';
+        if (a.type === 'arrow') {
+          const ang = Math.atan2(e.y - s.y, e.x - s.x), head = Math.max(12 * k, c.lineWidth * 3.5);
+          c.beginPath(); c.moveTo(s.x, s.y); c.lineTo(e.x, e.y); c.stroke();
+          c.beginPath(); c.moveTo(e.x - head * Math.cos(ang - Math.PI / 6), e.y - head * Math.sin(ang - Math.PI / 6)); c.lineTo(e.x, e.y); c.lineTo(e.x - head * Math.cos(ang + Math.PI / 6), e.y - head * Math.sin(ang + Math.PI / 6)); c.stroke();
+        } else if (a.type === 'rect') c.strokeRect(s.x, s.y, e.x - s.x, e.y - s.y);
+        else if (a.type === 'highlight') {
+          c.globalAlpha = Math.min(.35, a.opacity ?? .35); c.fillRect(s.x, s.y, e.x - s.x, e.y - s.y);
+          c.globalAlpha = a.opacity ?? 1; c.strokeRect(s.x, s.y, e.x - s.x, e.y - s.y);
+        } else if (a.type === 'ellipse') {
+          c.beginPath(); c.ellipse((s.x + e.x) / 2, (s.y + e.y) / 2, Math.abs(e.x - s.x) / 2, Math.abs(e.y - s.y) / 2, 0, 0, Math.PI * 2); c.stroke();
+        } else if (a.type === 'pen') {
+          c.beginPath(); pointsOf(a).forEach((q, i) => { const p = P(q); i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y); }); c.stroke();
+        } else if (a.type === 'text') {
+          c.font = `700 ${(a.fontSize || 22) * k * 1.2}px Inter, system-ui, sans-serif`;
+          c.shadowColor = 'rgba(0,0,0,.72)'; c.shadowBlur = 5 * k * 1.2;
+          c.fillText(a.text, s.x, s.y);
+        }
+        c.restore();
+      }
+
+      function render() {
+        const rect = stage.getBoundingClientRect(), r = getVideoRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        state.annotations.filter(isVisible).forEach((a) => {
+          paint(ctx, a, r.left, r.top, r.width, r.height);
+          if (a.id === state.selectedId) {
+            const b = annotationBounds(a), tl = { x:r.left + b.left * r.width, y:r.top + b.top * r.height }, br = { x:r.left + b.right * r.width, y:r.top + b.bottom * r.height };
+            ctx.save(); ctx.globalAlpha = .8; ctx.setLineDash([5, 4]); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.strokeRect(tl.x - 5, tl.y - 5, br.x - tl.x + 10, br.y - tl.y + 10); ctx.restore();
+          }
+        });
+        if (state.drawing) paint(ctx, { ...state.drawing, opacity:state.opacity, color:state.color, strokeWidth:state.strokeWidth }, r.left, r.top, r.width, r.height);
+        updateTimelineUi();
+      }
+      function updateTimelineUi() {
+        const t = state.t, dur = Number.isFinite(video.duration) ? video.duration : 0;
+        if (document.activeElement !== $('time-input')) $('time-input').value = formatTime(t);
+        $('duration').textContent = formatTime(dur);
+        $('timestamp-badge').textContent = `${formatTime(t)} · f${frameIndex(t)}`;
+        $('timestamp-badge').style.display = video.videoWidth ? 'block' : 'none';
+        $('timeline').max = dur || 0; $('timeline').value = t;
+        $('timeline-progress').style.width = dur ? `${(t / dur) * 100}%` : '0%';
+      }
+      function updateTicks() {
+        const box = $('annotation-ticks'), dur = Number.isFinite(video.duration) ? video.duration : 0;
+        box.innerHTML = '';
+        if (!dur) return;
+        state.annotations.forEach((a) => { const el = document.createElement('span'); el.className = 'annotation-tick'; el.style.left = `${(a.time / dur) * 100}%`; el.title = formatTime(a.time); box.appendChild(el); });
+      }
+      function refreshList() {
+        const list = $('annotation-list');
+        list.innerHTML = '';
+        if (!state.annotations.length) { list.innerHTML = '<div class="empty-list">No annotations yet. Pause on a frame and draw your first mark.</div>'; updateTicks(); return; }
+        [...state.annotations].sort((a, b) => a.time - b.time).forEach((a) => {
+          const card = document.createElement('div');
+          card.className = `annotation-card${a.id === state.selectedId ? ' selected' : ''}`;
+          const title = document.createElement('div'); title.className = 'annotation-card-title';
+          const t = document.createElement('span'); t.className = 'annotation-card-time'; t.textContent = formatTime(a.time);
+          const n = document.createElement('span'); n.textContent = a.type === 'text' ? `“${a.text}”` : typeNames[a.type] || a.type;
+          title.append(t, n);
+          const meta = document.createElement('div'); meta.className = 'annotation-card-meta'; meta.textContent = `frame ${frameIndex(a.time)} · ${Math.round(a.start.x * 100)}%, ${Math.round(a.start.y * 100)}%`;
+          const del = document.createElement('button'); del.className = 'delete-annotation'; del.type = 'button'; del.title = 'Delete annotation'; del.setAttribute('aria-label', 'Delete annotation'); del.textContent = '×';
+          card.append(title, meta, del);
+          card.addEventListener('click', (e) => { if (e.target === del) return; state.selectedId = a.id; video.pause(); seekTo(a.time + 0.0005); refreshList(); });
+          del.addEventListener('click', () => { state.annotations = state.annotations.filter((x) => x.id !== a.id); if (state.selectedId === a.id) state.selectedId = null; refreshList(); render(); });
+          list.appendChild(card);
+        });
+        updateTicks();
+      }
+
+      /* ---------- time & transport ---------- */
+      function sync(t) { state.t = t; render(); }
+      function seekTo(t) {
+        if (!video.duration) return;
+        const target = clamp(t, 0, video.duration);
+        video.currentTime = target; sync(target);
+      }
+      // Step by whole frames from the frame we're actually on; the small offset keeps us safely inside the target frame.
+      function stepFrames(n) { video.pause(); seekTo((frameIndex(state.t) + n + 0.02) / state.fps); }
+      function skip(sec) { video.pause(); seekTo(state.t + sec); }
+
+      let lastMedia = null, votes = 0;
+      const COMMON = [23.976, 24, 25, 29.97, 30, 48, 50, 59.94, 60];
+      function onFrame(now, meta) {
+        sync(meta.mediaTime);
+        if (!video.paused && !state.fpsLocked && lastMedia !== null) {
+          const d = meta.mediaTime - lastMedia;
+          if (d > 0.004 && d < 0.1) {
+            const est = 1 / d, hit = COMMON.find((r) => Math.abs(r - est) / r < 0.03);
+            if (hit) { votes = hit === state.fps ? 0 : votes + 1; if (votes > 20) { state.fps = hit; $('fps').value = hit; votes = 0; render(); } }
+          }
+        }
+        lastMedia = meta.mediaTime;
+        video.requestVideoFrameCallback(onFrame);
+      }
+      if (hasRVFC) video.requestVideoFrameCallback(onFrame);
+      else setInterval(() => sync(video.currentTime), 50);
+      video.addEventListener('seeked', () => { lastMedia = null; sync(video.currentTime); });
+      video.addEventListener('timeupdate', () => { if (!hasRVFC) sync(video.currentTime); });
+
+      $('timeline').addEventListener('input', (e) => { video.pause(); seekTo(Number(e.target.value)); });
+      $('play').addEventListener('click', () => { if (!video.src) return; video.paused ? video.play() : video.pause(); });
+      $('back-frame').addEventListener('click', () => stepFrames(-1));
+      $('forward-frame').addEventListener('click', () => stepFrames(1));
+      $('back-sec').addEventListener('click', () => skip(-1));
+      $('forward-sec').addEventListener('click', () => skip(1));
+      $('time-input').addEventListener('keydown', (e) => {
+        e.stopPropagation();
+        if (e.key === 'Enter') { const t = parseTime(e.target.value); if (Number.isFinite(t)) { video.pause(); seekTo(t); } e.target.blur(); }
+        if (e.key === 'Escape') e.target.blur();
+      });
+      $('time-input').addEventListener('focus', (e) => e.target.select());
+      $('time-input').addEventListener('blur', () => { $('time-input').value = formatTime(state.t); });
+      $('fps').addEventListener('change', (e) => { state.fps = clamp(Number(e.target.value) || 30, 1, 240); state.fpsLocked = true; e.target.value = state.fps; render(); });
+
+      /* ---------- loading ---------- */
+      function loadVideo(file) {
+        if (!file) return;
+        if (state.videoUrl) URL.revokeObjectURL(state.videoUrl);
+        state.videoUrl = URL.createObjectURL(file); state.filename = file.name; state.annotations = []; state.selectedId = null; state.fpsLocked = false; state.t = 0; lastMedia = null;
+        video.src = state.videoUrl; video.load();
+        $('empty-state').style.display = 'none'; stage.classList.add('has-video');
+        $('export-frame').disabled = false; $('copy-frame').disabled = false;
+        setStatus(file.name); refreshList();
+      }
+      $('file-input').addEventListener('change', (e) => { loadVideo(e.target.files[0]); e.target.value = ''; });
+      ['dragenter', 'dragover'].forEach((ev) => stage.addEventListener(ev, (e) => { e.preventDefault(); stage.classList.add('drag'); }));
+      ['dragleave', 'drop'].forEach((ev) => stage.addEventListener(ev, (e) => { e.preventDefault(); stage.classList.remove('drag'); }));
+      stage.addEventListener('drop', (e) => loadVideo(e.dataTransfer.files[0]));
+      video.addEventListener('loadedmetadata', () => { resizeCanvas(); setStatus(`${state.filename} · ${video.videoWidth}×${video.videoHeight}`); updateTicks(); });
+      video.addEventListener('loadeddata', () => sync(video.currentTime));
+      video.addEventListener('play', () => { $('play').textContent = '❚❚'; });
+      video.addEventListener('pause', () => { $('play').textContent = '▶'; sync(video.currentTime); });
+      video.addEventListener('ended', () => { $('play').textContent = '▶'; });
+      new ResizeObserver(resizeCanvas).observe(stage);
+
+      /* ---------- annotation input ---------- */
+      function selectTool(tool) { state.tool = tool; document.querySelectorAll('.tool-button').forEach((b) => b.classList.toggle('active', b.dataset.tool === tool)); overlay.style.cursor = tool === 'select' ? 'default' : 'crosshair'; }
+      function addAnnotation(a) {
+        const done = { ...a, id: uid(), time: Math.round(state.t * 10000) / 10000, color: state.color, opacity: state.opacity, strokeWidth: state.strokeWidth };
+        state.annotations.push(done); state.selectedId = done.id; refreshList(); render();
+      }
+      function openTextEditor(info) {
+        state.pendingText = info;
+        const b = stage.getBoundingClientRect(), ed = $('text-editor');
+        ed.style.left = `${clamp(info.clientX - b.left, 8, b.width - 253)}px`; ed.style.top = `${clamp(info.clientY - b.top, 8, b.height - 85)}px`;
+        ed.classList.add('open'); $('text-input').value = ''; $('text-input').focus();
+      }
+      function closeTextEditor() { state.pendingText = null; $('text-editor').classList.remove('open'); }
+      function commitText() { const text = $('text-input').value.trim(); if (text && state.pendingText) addAnnotation({ type:'text', start:state.pendingText.point, text, fontSize:22 }); closeTextEditor(); }
+
+      overlay.addEventListener('pointerdown', (e) => {
+        if (!video.videoWidth) return;
+        e.preventDefault(); video.pause(); overlay.setPointerCapture(e.pointerId);
+        const p = pointerToNorm(e);
+        if (state.tool === 'select') {
+          const hit = findAt(p);
+          state.selectedId = hit ? hit.id : null;
+          state.dragging = hit ? { id:hit.id, from:p, original:{ start:{ ...hit.start }, end:hit.end ? { ...hit.end } : null, pts:hit.pts ? hit.pts.map((q) => ({ ...q })) : null } } : null;
+          refreshList(); render(); return;
+        }
+        if (state.tool === 'text') { openTextEditor({ point:p, clientX:e.clientX, clientY:e.clientY }); return; }
+        state.drawing = { type:state.tool, start:p, end:p, pts:state.tool === 'pen' ? [p] : null };
+      });
+      overlay.addEventListener('pointermove', (e) => {
+        const p = pointerToNorm(e);
+        if (state.dragging) { const a = state.annotations.find((x) => x.id === state.dragging.id); if (a) moveAnnotation(a, state.dragging.original, { x:p.x - state.dragging.from.x, y:p.y - state.dragging.from.y }); render(); return; }
+        if (!state.drawing) return;
+        state.drawing.end = p; if (state.drawing.pts) state.drawing.pts.push(p);
+        render();
+      });
+      overlay.addEventListener('pointerup', (e) => {
+        if (state.dragging) { state.dragging = null; refreshList(); render(); return; }
+        if (!state.drawing) return;
+        const d = state.drawing; d.end = pointerToNorm(e); if (d.pts) d.pts.push(d.end);
+        const big = Math.abs(d.end.x - d.start.x) > .005 || Math.abs(d.end.y - d.start.y) > .005 || (d.pts && d.pts.length > 3);
+        state.drawing = null;
+        if (big) addAnnotation(d); else render();
+      });
+      $('add-text').addEventListener('click', commitText);
+      $('cancel-text').addEventListener('click', closeTextEditor);
+      $('text-input').addEventListener('keydown', (e) => { e.stopPropagation(); if (e.key === 'Enter') commitText(); if (e.key === 'Escape') closeTextEditor(); });
+      $('tool-grid').addEventListener('click', (e) => { const b = e.target.closest('.tool-button'); if (b) selectTool(b.dataset.tool); });
+      $('color').addEventListener('input', (e) => { state.color = e.target.value; $('color-value').textContent = e.target.value.toUpperCase(); });
+      $('stroke-width').addEventListener('input', (e) => { state.strokeWidth = Number(e.target.value); $('stroke-width-value').textContent = `${state.strokeWidth} px`; });
+      $('opacity').addEventListener('input', (e) => { state.opacity = Number(e.target.value) / 100; $('opacity-value').textContent = `${e.target.value}%`; });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.target.matches('input')) return;
+        if (e.key.toLowerCase() === 'o') { e.preventDefault(); $('file-input').click(); }
+        else if (e.code === 'Space') { e.preventDefault(); $('play').click(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); e.shiftKey ? skip(-1) : stepFrames(-1); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); e.shiftKey ? skip(1) : stepFrames(1); }
+        else if ((e.key === 'Backspace' || e.key === 'Delete') && state.selectedId) { state.annotations = state.annotations.filter((a) => a.id !== state.selectedId); state.selectedId = null; refreshList(); render(); }
+      });
+
+      /* ---------- export ---------- */
+      function renderFrame() {
+        if (!video.videoWidth) return null;
+        const W = video.videoWidth, H = video.videoHeight, out = document.createElement('canvas');
+        out.width = W; out.height = H;
+        const c = out.getContext('2d');
+        c.drawImage(video, 0, 0, W, H);
+        state.annotations.filter(isVisible).forEach((a) => paint(c, a, 0, 0, W, H));
+        if ($('stamp').checked) {
+          const label = `${formatTime(state.t)}  ·  frame ${frameIndex(state.t)}`, fs = Math.max(18, Math.round(W / 72)), p = Math.round(fs * .45);
+          c.save(); c.font = `700 ${fs}px ui-monospace, SFMono-Regular, Consolas, monospace`;
+          const bw = c.measureText(label).width + p * 2, bh = fs + p * 1.5, y = H - p - bh;
+          c.fillStyle = 'rgba(6,9,12,.82)'; c.fillRect(p, y, bw, bh); c.fillStyle = '#c9f36b'; c.fillText(label, p * 2, y + fs + p * .18); c.restore();
+        }
+        return out;
+      }
+      const toPng = (cv) => new Promise((res) => cv.toBlob(res, 'image/png'));
+      function download(blob, name) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
+      const baseName = () => (state.filename || 'frame').replace(/\.[^.]+$/, '');
+      $('export-frame').addEventListener('click', async () => {
+        const out = renderFrame(); if (!out) return;
+        const blob = await toPng(out); if (blob) download(blob, `${baseName()}-${formatTime(state.t).replace(/[:.]/g, '-')}.png`);
+      });
+      $('copy-frame').addEventListener('click', async () => {
+        const out = renderFrame(); if (!out) return;
+        try {
+          if (!navigator.clipboard || !window.ClipboardItem) throw new Error('unsupported');
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': toPng(out) })]);
+          setStatus(`Frame copied · ${formatTime(state.t)}`);
+        } catch { setStatus('Clipboard image access unavailable. Use Export frame instead.'); }
+      });
+      $('save-project').addEventListener('click', () => download(new Blob([JSON.stringify({ version:2, filename:state.filename, fps:state.fps, annotations:state.annotations }, null, 2)], { type:'application/json' }), `${baseName()}.framemark.json`));
+      $('load-project').addEventListener('click', () => $('project-input').click());
+      $('project-input').addEventListener('change', async (e) => {
+        const file = e.target.files[0]; if (!file) return;
+        try {
+          const d = JSON.parse(await file.text());
+          state.fps = clamp(Number(d.fps) || 30, 1, 240); state.fpsLocked = true; $('fps').value = state.fps;
+          state.annotations = (Array.isArray(d.annotations) ? d.annotations : []).filter((a) => a && a.start && typeof a.time === 'number');
+          state.selectedId = null; refreshList(); render(); setStatus(`${state.filename || 'Video'} · project loaded`);
+        } catch { setStatus('Could not read project file'); }
+        e.target.value = '';
+      });
+
+      refreshList(); resizeCanvas();
+    })();
+  </script>
+</body>
+</html>

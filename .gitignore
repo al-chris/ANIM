@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build and test output
+dist/
+build/
+coverage/
+.cache/
+*.tsbuildinfo
+
+# Generated media
+*.webm
+*.mp4
+*.mov
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+test.jpg

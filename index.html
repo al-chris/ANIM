@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#11131a">
+    <title>Lineart Studio – In-Browser Photo to Vector SVG &amp; Animated Sketch Maker</title>
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Lineart Studio – In-Browser Photo to Vector SVG &amp; Animated Sketch Maker">
+    <meta name="description" content="Convert photos into clean vector line art (SVG) directly in your browser. Features AI face enhancement, custom detail regions, stroke reveals, and WebM video export.">
+    <meta name="keywords" content="photo to vector, image to svg, line art generator, vectorizer, vtracer wasm, opencv js, sketch animation, ink wash animation, webm export, client side vectorization">
+    <meta name="author" content="Lineart Studio">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="./index.html">
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Lineart Studio">
+    <meta property="og:title" content="Lineart Studio – In-Browser Photo to Vector SVG &amp; Animated Sketch Maker">
+    <meta property="og:description" content="Turn any photo into scalable vector line art (SVG) and recorded sketch animations directly in your browser. 100% private, client-side processing.">
+    <meta property="og:url" content="./index.html">
+    <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630' width='1200' height='630'%3E%3Crect width='1200' height='630' fill='%2311131a'/%3E%3Crect x='100' y='100' width='120' height='120' rx='28' fill='%23c2f36b'/%3E%3Cpath d='M136 128h20v52h40v20H136z' fill='%23161910'/%3E%3Ctext x='260' y='185' font-family='sans-serif' font-size='60' font-weight='800' fill='%23f1f4f7'%3ELineart Studio%3C/text%3E%3Ctext x='100' y='320' font-family='sans-serif' font-size='38' font-weight='600' fill='%23c2f36b'%3EPhoto to Scalable Vector Line Art%3C/text%3E%3Ctext x='100' y='380' font-family='sans-serif' font-size='26' fill='%238d98a7'%3EPrivate client-side tracing %E2%80%A2 OpenCV %E2%80%A2 VTracer WASM%3C/text%3E%3Ctext x='100' y='430' font-family='sans-serif' font-size='26' fill='%238d98a7'%3EAnimated sketch reveals %E2%80%A2 Calligraphy %E2%80%A2 WebM export%3C/text%3E%3C/svg%3E">
+    <meta property="og:image:alt" content="Lineart Studio vector graphics application preview">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Lineart Studio – Photo to Vector Line Art &amp; Animated Sketch Maker">
+    <meta name="twitter:description" content="Turn photos into clean vector SVG art and animated videos directly in your browser with OpenCV and VTracer WASM.">
+    <meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630' width='1200' height='630'%3E%3Crect width='1200' height='630' fill='%2311131a'/%3E%3Crect x='100' y='100' width='120' height='120' rx='28' fill='%23c2f36b'/%3E%3Cpath d='M136 128h20v52h40v20H136z' fill='%23161910'/%3E%3Ctext x='260' y='185' font-family='sans-serif' font-size='60' font-weight='800' fill='%23f1f4f7'%3ELineart Studio%3C/text%3E%3Ctext x='100' y='320' font-family='sans-serif' font-size='38' font-weight='600' fill='%23c2f36b'%3EPhoto to Scalable Vector Line Art%3C/text%3E%3Ctext x='100' y='380' font-family='sans-serif' font-size='26' fill='%238d98a7'%3EPrivate client-side tracing %E2%80%A2 OpenCV %E2%80%A2 VTracer WASM%3C/text%3E%3Ctext x='100' y='430' font-family='sans-serif' font-size='26' fill='%238d98a7'%3EAnimated sketch reveals %E2%80%A2 Calligraphy %E2%80%A2 WebM export%3C/text%3E%3C/svg%3E">
+
+    <!-- Schema.org JSON-LD Structured Data: WebApplication & FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Lineart Studio",
+          "url": "./index.html",
+          "applicationCategory": "DesignApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires WebAssembly (WASM) and HTML5 Canvas",
+          "description": "Browser-based application to convert bitmap photos (PNG, JPEG, WebP) into clean, scalable SVG vector line art with customizable line thresholds, face detection enhancement, hand-drawn detailing, and animated stroke reveal export.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "featureList": [
+            "Local client-side raster-to-vector tracing using OpenCV.js and VTracer WASM",
+            "MediaPipe local face detection for boosting portrait line detail",
+            "Custom Regions of Interest (ROI) with adjustable stroke emphasis",
+            "Freehand and spline boundary isolation for subject cutout",
+            "Integrated canvas retouching with calligraphy, monoline, marker, and pencil brushes",
+            "Dynamic animation reveals: pen sketch, Guofeng ink flow, Sumi-e, and origami unfolds",
+            "High-resolution SVG and WebM video export"
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How does Lineart Studio convert photos to vector SVG in the browser?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Lineart Studio runs WebAssembly-compiled VTracer and OpenCV.js entirely on your local device. It applies edge detection, bilateral filtering, and contour tracing to convert pixel rasters into clean mathematical Bézier paths without sending your photos to any remote server."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are my images uploaded to an external server?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. All image processing, face detection, vectorization, and video rendering happen strictly client-side inside your browser ensuring 100% data privacy."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I record and export animated line art reveals?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Lineart Studio includes an animation engine that simulates real-time pen sketching, printer scanning, ink wash bloom, and origami reveals, and allows direct download as a WebM video."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23c2f36b'/%3E%3Cpath d='M18 14h10v26h20v10H18z' fill='%23161910'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="./src/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Lineart Studio home">
+        <span class="brand-mark" aria-hidden="true">L</span>
+        <span>Lineart Studio</span>
+      </a>
+      <p class="topbar-note">Photo to vector line art</p>
+      <span class="engine-status" id="engine-status" role="status">Loading image tools…</span>
+    </header>
+
+    <main class="layout" id="app-layout">
+      <aside class="controls" id="controls-drawer">
+        <button
+          class="button button-secondary icon-button drawer-close"
+          id="close-drawer"
+          type="button"
+          aria-label="Hide controls"
+          data-tooltip="Hide controls"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M14.7 5.3 8 12l6.7 6.7 1.4-1.4L10.8 12l5.3-5.3z"></path>
+          </svg>
+        </button>
+        <section>
+          <p class="eyebrow">01 / SOURCE</p>
+          <h1>Turn a photo into line art</h1>
+          <input id="image-upload" type="file" accept="image/png,image/jpeg,image/webp">
+          <label class="upload" for="image-upload">
+            <span class="upload-icon" aria-hidden="true">↑</span>
+            <span id="upload-label">Choose an image</span>
+            <span class="muted">PNG, JPEG, or WebP</span>
+          </label>
+        </section>
+
+        <section class="settings">
+          <p class="eyebrow">02 / ADJUST</p>
+          <label class="range-control" for="sigma">
+            <span>Line scale <output id="sigma-value">1.3</output></span>
+            <input id="sigma" type="range" min="0.4" max="3" step="0.1" value="1.3">
+            <small>Larger values simplify fine detail.</small>
+          </label>
+          <label class="range-control" for="epsilon">
+            <span>Threshold <output id="epsilon-value">5</output></span>
+            <input id="epsilon" type="range" min="-5" max="20" step="0.5" value="5">
+            <small>Raise it to remove faint lines.</small>
+          </label>
+          <label class="range-control" for="min-area">
+            <span>Minimum speck size <output id="min-area-value">25 px</output></span>
+            <input id="min-area" type="range" min="0" max="150" step="1" value="25">
+            <small>Small isolated marks are discarded.</small>
+          </label>
+          <div class="text-control">
+            <span>Subject boundary <span class="optional">optional</span></span>
+            <div class="boundary-toolbar" role="group" aria-label="Subject boundary tools">
+              <select id="boundary-mode" aria-label="Boundary drawing mode">
+                <option value="freehand">Freehand (smooth)</option>
+                <option value="points">Points (spline)</option>
+              </select>
+              <button
+                class="button button-secondary icon-button"
+                id="clear-boundary"
+                type="button"
+                aria-label="Clear subject boundary"
+                data-tooltip="Clear subject boundary"
+                disabled
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M6 7h12v13H6zM8 4h8l1 2H7zM9 9h2v8H9zm4 0h2v8h-2z"></path>
+                </svg>
+              </button>
+            </div>
+            <textarea id="polygon" rows="2" placeholder="x,y x,y x,y …" hidden></textarea>
+            <small id="boundary-help">Draw on the source image to create a smooth boundary, or place points and click the first point to close it. Outside is removed.</small>
+          </div>
+          <div class="detail-controls">
+            <p class="eyebrow">OPTIONAL / DETAIL</p>
+            <label class="check-control" for="enhance-faces">
+              <input id="enhance-faces" type="checkbox">
+              <span>Boost detected face details</span>
+            </label>
+            <small class="detail-help">Face detection and enhancement run locally before tracing.</small>
+            <label class="check-control" for="enable-roi">
+              <input id="enable-roi" type="checkbox">
+              <span>Select custom detail regions</span>
+            </label>
+            <small class="detail-help">Drag on empty image space to add a region. Drag inside one to move it, or use its handles to resize it.</small>
+            <label class="check-control" for="emphasize-rois">
+              <input id="emphasize-rois" type="checkbox">
+              <span>Emphasize selected regions</span>
+            </label>
+            <small class="detail-help">Selected regions get brighter, denser strokes; everything else fades back.</small>
+            <div class="roi-toolbar">
+              <button class="button button-secondary" id="clear-rois" type="button" disabled>Clear regions</button>
+              <output id="roi-count">0 regions</output>
+            </div>
+            <p class="detail-help" id="roi-status" role="status">Draw rectangles on the source image. Move them by dragging inside, or resize them with their handles.</p>
+          </div>
+          <label class="check-control" for="background">
+            <input id="background" type="checkbox">
+            <span>Add a white background to the SVG</span>
+          </label>
+        </section>
+
+        <section class="actions">
+          <span class="tooltip-anchor full-width-tooltip" data-tooltip="Generate an SVG from this image">
+            <button
+              class="button button-primary generate-button"
+              id="trace-button"
+              type="button"
+              aria-label="Generate SVG"
+              disabled
+            >
+              <span>Generate SVG</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+          </span>
+          <span class="tooltip-anchor full-width-tooltip" data-tooltip="Download the generated SVG">
+            <button
+              class="button button-secondary"
+              id="download-button"
+              type="button"
+              aria-label="Download SVG"
+              disabled
+            >Download SVG</button>
+          </span>
+          <p class="message" id="message" role="status">Choose an image to begin.</p>
+          <p class="privacy-note">Images are processed locally in your browser.</p>
+        </section>
+      </aside>
+      <button
+        class="button button-secondary drawer-handle"
+        id="open-drawer"
+        type="button"
+        aria-label="Show controls"
+        data-tooltip="Show controls"
+        aria-expanded="true"
+        hidden
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="m9.3 18.7 6.7-6.7-6.7-6.7-1.4 1.4 5.3 5.3-5.3 5.3z"></path>
+        </svg>
+      </button>
+
+      <section class="workspace" aria-label="Image preview">
+        <div class="preview-heading">
+          <div>
+            <p class="eyebrow">03 / RESULT</p>
+            <h2>Preview</h2>
+          </div>
+          <span class="dimensions" id="dimensions"></span>
+        </div>
+        <div class="previews">
+          <article class="preview-card source-preview-card">
+              <div class="card-heading">
+                <h3>Original</h3>
+                <button
+                  class="button button-secondary icon-button source-rail-toggle"
+                  id="source-rail-toggle"
+                  type="button"
+                  aria-label="Collapse original image"
+                  data-tooltip="Collapse original image"
+                  hidden
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M14.7 5.3 8 12l6.7 6.7 1.4-1.4L10.8 12l5.3-5.3z"></path>
+                  </svg>
+                </button>
+              </div>
+            <div class="preview-image" id="source-preview-stage">
+              <div class="empty-state" id="source-empty">Your image will appear here</div>
+              <img id="source-preview" alt="Selected source image" hidden>
+              <canvas id="roi-canvas" hidden aria-label="Draw, move, and resize custom detail regions on the image"></canvas>
+              <canvas id="boundary-canvas" hidden aria-label="Draw the subject boundary on the image"></canvas>
+            </div>
+          </article>
+          <article class="preview-card vector-preview-card" id="vector-card">
+            <div class="card-heading">
+              <h3>Vector artwork</h3>
+              <button
+                class="button button-secondary icon-button"
+                id="fullscreen-toggle"
+                type="button"
+                aria-label="Enter full screen"
+                data-tooltip="Full screen (F)"
+                data-tooltip-position="end"
+                hidden
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path id="fullscreen-icon-path" d="M5 5h5v2H7v3H5V5zm9 0h5v5h-2V7h-3V5zM5 14h2v3h3v2H5v-5zm12 0h2v5h-5v-2h3v-3z"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="preview-image checkerboard" id="vector-preview">
+              <div class="empty-state" id="result-empty">Generate an SVG to see the result</div>
+              <div class="vector-viewport" id="vector-viewport" hidden>
+                <img id="reference-overlay" alt="" hidden>
+                <svg id="vector-svg" class="vector-art" aria-label="Generated vector line art"></svg>
+                <canvas id="drawing-canvas" hidden aria-label="Draw over the vector artwork"></canvas>
+              </div>
+              <div class="rail-toast" id="rail-toast" role="status" hidden>
+                <span>Original hidden to give you more room.</span>
+                <button type="button" id="rail-toast-undo">Undo</button>
+              </div>
+            </div>
+          </article>
+            <button
+              class="button button-secondary icon-button source-rail-handle"
+              id="source-rail-handle"
+              type="button"
+              aria-label="Show original image"
+              data-tooltip="Show original image"
+              hidden
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="m9.3 18.7 6.7-6.7-6.7-6.7-1.4 1.4 5.3 5.3-5.3 5.3z"></path>
+              </svg>
+            </button>
+        </div>
+        <div class="artwork-actions" id="artwork-actions" hidden>
+          <div class="reference-controls" id="reference-controls" hidden>
+            <div class="reference-heading">
+              <span>Tracing reference</span>
+              <label class="check-control tooltip-anchor" for="show-reference" data-tooltip="Shows the original under the SVG and hides the Original card while drawing" data-tooltip-position="end" data-tooltip-side="below">
+                <input id="show-reference" type="checkbox">
+                <span>Show overlay</span>
+              </label>
+            </div>
+            <label class="compact-control reference-opacity-control" for="reference-opacity">
+              <span>Overlay opacity <output id="reference-opacity-value">45%</output></span>
+              <input id="reference-opacity" type="range" min="0" max="100" step="1" value="45">
+            </label>
+            <div class="reference-upload-row">
+              <input id="reference-upload" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+              <label class="button button-secondary reference-upload" for="reference-upload">Upload custom image</label>
+              <button class="button button-secondary" id="use-source-reference" type="button">Use source image</button>
+            </div>
+            <p class="reference-help" id="reference-help">The source image appears beneath the SVG while drawing.</p>
+          </div>
+          <div class="action-row">
+            <button
+              class="button button-secondary icon-button"
+              data-tooltip-position="start"
+              data-tooltip-side="below"
+              id="toggle-drawing"
+              type="button"
+              aria-label="Draw on canvas"
+              data-tooltip="Draw on canvas"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.42l-2.33-2.33a1 1 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path>
+              </svg>
+            </button>
+            <label class="compact-control style-control" for="brush-style">
+              <span>Brush style</span>
+              <select id="brush-style">
+                <option value="calligraphy">Calligraphy</option>
+                <option value="monoline">Monoline pen</option>
+                <option value="marker">Marker</option>
+                <option value="pencil">Pencil</option>
+              </select>
+            </label>
+            <label class="compact-control" for="brush-size">
+              <span>Brush size <output id="brush-size-value">6 px</output></span>
+              <input id="brush-size" type="range" min="1" max="24" step="1" value="6">
+            </label>
+            <label class="color-control" for="brush-color">Ink
+              <input id="brush-color" type="color" value="#141414">
+            </label>
+            <span class="tooltip-anchor" data-tooltip="Undo the most recent stroke" data-tooltip-position="end" data-tooltip-side="below">
+              <button
+                class="button button-secondary icon-button"
+                id="undo-drawing"
+                type="button"
+                aria-label="Undo stroke"
+                disabled
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
+                </svg>
+              </button>
+            </span>
+          </div>
+          <div class="action-row animation-row">
+            <label class="compact-control style-control" for="animation-style">
+              <span>Animation style</span>
+              <select id="animation-style">
+                <option value="pen-sketch">Pen sketch (overlap)</option>
+                <option value="sequential">Sequential stroke (no overlap)</option>
+                <option value="printer">Printer scan</option>
+                <option value="diagonal">Diagonal sweep</option>
+                <optgroup label="Ink modes">
+                  <option value="ink-guofeng">国风 · Guofeng ink flow</option>
+                  <option value="ink-wash">水墨 · Ink wash bloom</option>
+                  <option value="ink-calligraphy">书法 · Calligraphy write-in</option>
+                  <option value="ink-sumie">墨絵 · Sumi-e</option>
+                </optgroup>
+                <optgroup label="Vector reveals">
+                  <option value="ink-origami">折纸 · Origami fold-out (packet)</option>
+                  <option value="ink-origami-swan">天鹅 · Origami swan</option>
+                  <option value="ink-origami-crane">鹤 · Origami crane</option>
+                  <option value="ink-origami-cat">猫 · Origami cat</option>
+                  <option value="ink-origami-butterfly">蝶 · Origami butterfly</option>
+                  <option value="ink-origami-envelope">信封 · Origami envelope</option>
+                  <option value="ink-origami-star">星 · Origami star</option>
+                  <option value="ink-magnetic">磁吸 · Magnetic node snap</option>
+                  <option value="ink-louver">百叶 · Venetian louver wipe</option>
+                  <option value="ink-vines">藤蔓 · Botanical vine weave</option>
+                  <option value="ink-kaleidoscope">万花 · Kaleidoscope</option>
+                </optgroup>
+              </select>
+            </label>
+            <button
+              class="button button-secondary icon-button"
+              id="play-animation"
+              type="button"
+              data-tooltip-side="below"
+              aria-label="Play animation preview"
+              data-tooltip="Play animation preview"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M8 5.5a1 1 0 0 1 1.53-.85l9 6.5a1 1 0 0 1 0 1.7l-9 6.5A1 1 0 0 1 8 18.5z"></path>
+              </svg>
+            </button>
+            <label class="compact-control duration-control" for="animation-duration">
+              <span>Duration <output id="animation-duration-value">5 s</output></span>
+              <input id="animation-duration" type="range" min="2" max="30" step="1" value="5">
+            </label>
+            <label class="compact-control duration-control" for="animation-hold">
+              <span>Completed sketch hold <output id="animation-hold-value">2 s</output></span>
+              <input id="animation-hold" type="range" min="0" max="30" step="1" value="2">
+            </label>
+            <button
+              class="button button-primary record-button icon-button"
+              data-tooltip-position="end"
+              data-tooltip-side="below"
+              id="record-webm"
+              type="button"
+              aria-label="Record WebM"
+              data-tooltip="Record the animation as a WebM video"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="6.5"></circle>
+              </svg>
+            </button>
+            <a class="button button-secondary webm-download" id="download-webm" hidden download="lineart-animation.webm">Download WebM</a>
+          </div>
+          <p class="workspace-note" id="artwork-message" role="status">Drawn strokes are vectorized when you lift the pen.</p>
+        </div>
+        <p class="workspace-note" id="workspace-note">Adjust the controls, then generate a clean, scalable SVG.</p>
+      </section>
+    </main>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

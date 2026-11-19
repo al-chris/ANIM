@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbital Trail Curve Fitting Explorer – Interactive Bézier, Spline & Spiral Visualizer</title>
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Orbital Trail Curve Fitting Explorer – Interactive Bézier, Spline & Spiral Visualizer">
+    <meta name="description"
+        content="Compare 7 real-time curve fitting algorithms for orbital trails and trajectories. Interactive visualizer for Quadratic Bézier, Rational Bézier, Logarithmic Spiral, Euler Clothoid, Biarc, and TCB Splines in HTML5 Canvas.">
+    <meta name="keywords"
+        content="curve fitting, orbital trails, bezier curve, catmull-rom spline, clothoid, euler spiral, biarc interpolation, computational geometry, game dev mathematics, particle trails, html5 canvas">
+    <meta name="author" content="Orbital Curve Fitting Explorer">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="theme-color" content="#0b0f19">
+    <link rel="canonical" href="./orbital_curve_fitting.html">
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Orbital Curve Fitting Explorer">
+    <meta property="og:title"
+        content="Orbital Trail Curve Fitting Explorer – Interactive Bézier, Spline & Spiral Visualizer">
+    <meta property="og:description"
+        content="Real-time interactive comparison of 7 trajectory curve fitting algorithms for game physics, VFX trails, and orbital animations.">
+    <meta property="og:url" content="./orbital_curve_fitting.html">
+    <meta property="og:image"
+        content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630' width='1200' height='630'%3E%3Crect width='1200' height='630' fill='%230b0f19'/%3E%3Ccircle cx='600' cy='315' r='200' fill='none' stroke='%23334155' stroke-width='2' stroke-dasharray='8 8'/%3E%3Cpath d='M460,315 C520,240 680,210 740,315' fill='none' stroke='%2338bdf8' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='740' cy='315' r='14' fill='%23fbbf24'/%3E%3Ctext x='600' y='460' font-family='sans-serif' font-size='44' font-weight='bold' fill='%23f8fafc' text-anchor='middle'%3EOrbital Curve Fitting Explorer%3C/text%3E%3Ctext x='600' y='510' font-family='sans-serif' font-size='24' fill='%2394a3b8' text-anchor='middle'%3EB%C3%A9zier %E2%80%A2 Splines %E2%80%A2 Euler Clothoid %E2%80%A2 Logarithmic Spiral%3C/text%3E%3C/svg%3E">
+    <meta property="og:image:alt" content="Orbital Trail Curve Fitting Explorer preview graphic">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Orbital Trail Curve Fitting Explorer – Interactive Bézier & Spline Visualizer">
+    <meta name="twitter:description"
+        content="Real-time interactive comparison of 7 trajectory curve fitting algorithms for game physics, VFX trails, and orbital animations.">
+    <meta name="twitter:image"
+        content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630' width='1200' height='630'%3E%3Crect width='1200' height='630' fill='%230b0f19'/%3E%3Ccircle cx='600' cy='315' r='200' fill='none' stroke='%23334155' stroke-width='2' stroke-dasharray='8 8'/%3E%3Cpath d='M460,315 C520,240 680,210 740,315' fill='none' stroke='%2338bdf8' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='740' cy='315' r='14' fill='%23fbbf24'/%3E%3Ctext x='600' y='460' font-family='sans-serif' font-size='44' font-weight='bold' fill='%23f8fafc' text-anchor='middle'%3EOrbital Curve Fitting Explorer%3C/text%3E%3Ctext x='600' y='510' font-family='sans-serif' font-size='24' fill='%2394a3b8' text-anchor='middle'%3EB%C3%A9zier %E2%80%A2 Splines %E2%80%A2 Euler Clothoid %E2%80%A2 Logarithmic Spiral%3C/text%3E%3C/svg%3E">
+
+    <!-- Schema.org Structured Data: WebApplication + FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Orbital Trail Curve Fitting Explorer",
+          "url": "./orbital_curve_fitting.html",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires HTML5 Canvas and modern ES6 JavaScript",
+          "description": "Interactive visualizer and benchmark comparing 7 mathematical curve fitting algorithms (Bézier, Hermite, Clothoid, Biarc, and Logarithmic Spirals) fitted to orbital sample points.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "featureList": [
+            "Real-time interactive curve simulation with orbital dynamics",
+            "Amplified Quadratic Bézier with spiral skewing (O(1) closed-form)",
+            "Rational Quadratic Bézier with projective weights",
+            "Logarithmic spiral fitting (r = a·e^(bθ))",
+            "Euler spiral / clothoid linear curvature approximation",
+            "Biarc interpolation with G1 continuous circular arcs",
+            "Kochanek-Bartels (TCB) Spline with tension and bias controls",
+            "Chaikin corner-cutting subdivision modeling",
+            "Interactive parameter sliders for sample points M, control points K, angular spacing, and exaggeration"
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Why do circular orbit sample points look flat in trail rendering?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "When sample points on a large circular orbit are closely spaced in time, the sagitta (the distance from the chord to the arc midpoint) is extremely tiny (proportional to 1 - cos(θ/2)). Fitted with standard linear interpolation or constant curvature, the trail appears almost indistinguishable from a straight chord. Specialized curve fitting algorithms amplify or skew this sagitta vector to produce dynamic, sweeping spiral trails."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which orbital curve fitting algorithm is the fastest for real-time games?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The Amplified Quadratic Bézier with Spiral Skew provides O(1) ultra-fast performance with approximately 15 floating-point operations (FLOPs). It computes the chord midpoint, amplifies the circular sagitta vector by factor k, and adds a tangential skew without expensive trigonometric, iterative, or matrix solvers."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the difference between a Bézier curve and an Euler Clothoid for trajectories?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A polynomial Bézier curve has non-linearly varying curvature determined by its control polygon. In contrast, an Euler spiral (clothoid) has curvature that varies strictly linearly with arc length (κ(s) = κ₀ + α·s), which provides exceptionally smooth transitions between straight trajectories and tight circular curves without sudden lateral acceleration spikes."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Custom subtle starfield background & canvas styling */
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        /* Custom range slider styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            background: rgba(51, 65, 85, 0.7);
+            height: 6px;
+            border-radius: 999px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #38bdf8;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+            transition: transform 0.1s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- Main Interactive Canvas Area -->
+    <main class="relative flex-1 min-h-[55vh] lg:min-h-screen bg-[#070a12] overflow-hidden">
+        <canvas id="simCanvas" role="img"
+            aria-label="Interactive real-time canvas visualizing 7 orbital curve fitting algorithms on circular orbits">
+            <p class="sr-only">Interactive simulation comparing 7 orbital curve fitting algorithms: Amplified Quadratic
+                Bézier, Rational Bézier, Logarithmic Spiral, Euler Clothoid, Biarc Interpolation, Kochanek-Bartels
+                Spline, and Chaikin Subdivision.</p>
+        </canvas>
+
+        <!-- Floating Top-Left HUD Overlay -->
+        <div class="absolute top-4 left-4 right-4 sm:right-auto pointer-events-none flex flex-col gap-2 max-w-md">
+            <div class="bg-slate-900/80 backdrop-blur-md border border-slate-800/90 rounded-2xl p-4 shadow-2xl">
+                <div class="flex items-center justify-between gap-4 mb-1">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-sky-400">Active Curve
+                        Algorithm</span>
+                    <span id="costBadge"
+                        class="mono text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">O(1)
+                        Ultra-Fast</span>
+                </div>
+                <h1 id="activeCurveTitle" class="text-lg font-bold text-white">Amplified Quadratic Bézier (Spiral Skew)
+                </h1>
+                <p id="activeCurveDesc" class="text-xs text-slate-300 mt-1 leading-relaxed">
+                    Extracts the tiny sagitta bulge vector between the 3 circular points and amplifies/skews it to form
+                    a dramatic spiral-like sweeping tail.
+                </p>
+                <div id="activeFormula"
+                    class="mono text-[11px] text-amber-300/90 bg-slate-950/80 border border-slate-800 rounded-lg px-2.5 py-1.5 mt-2.5 overflow-x-auto">
+                    C = M + k·(P₁ - M) + skew·(P₂ - P₀)
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend Bottom-Left -->
+        <div
+            class="absolute bottom-4 left-4 pointer-events-none hidden sm:flex items-center gap-4 bg-slate-900/75 backdrop-blur-md border border-slate-800/80 rounded-xl px-3.5 py-2 text-xs text-slate-300">
+            <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block shadow-[0_0_8px_#fbbf24]"></span>
+                <span id="legendHead">Asteroid (P₂ Head)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-sky-400 inline-block"></span>
+                <span id="legendPoints">Sampled Orbit Points (P₀ … P₂)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-purple-400 inline-block"></span>
+                <span id="legendControl">Curve Control Points (C₀ … C₂)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-4 h-0.5 border-t border-dashed border-slate-500 inline-block"></span>
+                <span>True Orbit</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Control Sidebar -->
+    <aside
+        class="w-full lg:w-[390px] bg-slate-900 border-t lg:border-t-0 lg:border-l border-slate-800 p-5 flex flex-col gap-5 overflow-y-auto lg:max-h-screen">
+        <div>
+            <h2 class="text-base font-bold text-white tracking-tight">Trail Curve Selector</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Compare how different curve algorithms shape closely-spaced
+                circular trail points.</p>
+        </div>
+
+        <!-- Curve Algorithm Radio Cards -->
+        <div id="algorithmList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2">
+            <!-- Fallback content for search engines and noscript crawlers; hydrated dynamically on load -->
+            <article class="p-3 rounded-xl border border-slate-800/90 bg-slate-950/50">
+                <h3 class="text-xs font-semibold text-white">Amplified Quadratic Bézier (Spiral Skew)</h3>
+                <p class="text-[11px] text-slate-400">O(1) Ultra-Fast closed-form trail calculation amplifying the
+                    orbital sagitta vector.</p>
+            </article>
+            <article class="p-3 rounded-xl border border-slate-800/90 bg-slate-950/50">
+                <h3 class="text-xs font-semibold text-white">Rational Quadratic Bézier (Weighted)</h3>
+                <p class="text-[11px] text-slate-400">O(1) homogeneous weighting to modulate peak trail curvature.</p>
+            </article>
+            <article class="p-3 rounded-xl border border-slate-800/90 bg-slate-950/50">
+                <h3 class="text-xs font-semibold text-white">Logarithmic Spiral Fit (r = a·e^(bθ))</h3>
+                <p class="text-[11px] text-slate-400">Self-similar polar spiral fitting shifting the coordinate pole
+                    dynamically.</p>
+            </article>
+            <article class="p-3 rounded-xl border border-slate-800/90 bg-slate-950/50">
+                <h3 class="text-xs font-semibold text-white">Euler Spiral / Clothoid Approximation</h3>
+                <p class="text-[11px] text-slate-400">Linearly varying curvature transition spiral for smooth
+                    acceleration.</p>
+            </article>
+            <article class="p-3 rounded-xl border border-slate-800/90 bg-slate-950/50">
+                <h3 class="text-xs font-semibold text-white">Biarc Interpolation (2 Tangent Arcs)</h3>
+                <p class="text-[11px] text-slate-400">G1 continuous dual-radius circular arcs connected at a tangent
+                    inflection point.</p>
+            </article>
+            <article class="p-3 rounded-xl border border-slate-800/90 bg-slate-950/50">
+                <h3 class="text-xs font-semibold text-white">Kochanek–Bartels (TCB) Spline</h3>
+                <p class="text-[11px] text-slate-400">Cubic Hermite spline with tension, continuity, and bias controls.
+                </p>
+            </article>
+            <article class="p-3 rounded-xl border border-slate-800/90 bg-slate-950/50">
+                <h3 class="text-xs font-semibold text-white">Chaikin Corner-Cutting Subdivision</h3>
+                <p class="text-[11px] text-slate-400">Fast bit-shift corner subdivision algorithm producing quadratic
+                    B-splines.</p>
+            </article>
+        </div>
+
+        <!-- Tuning Parameters -->
+        <div class="bg-slate-950/60 border border-slate-800/90 rounded-2xl p-4 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Geometry & Shape Tuning</h3>
+                <button id="resetBtn" class="text-xs text-sky-400 hover:text-sky-300 font-medium transition">Reset
+                    Defaults</button>
+            </div>
+
+            <!-- Number of Sample Points on Orbit Circle -->
+            <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slate-300 font-medium">Sample Points on Circle (M)</span>
+                    <span id="samplePointsVal" class="mono text-sky-400">3 points</span>
+                </div>
+                <input id="samplePointsSlider" type="range" min="2" max="24" step="1" value="3" class="w-full">
+                <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                    <span>2 (Min chord)</span>
+                    <span>3 (Default)</span>
+                    <span>12</span>
+                    <span>24 (Dense)</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1">Number of positions sampled along the physical circular
+                    orbit.</p>
+            </div>
+
+            <!-- Number of Curve Control Points Slider -->
+            <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slate-300 font-medium">Curve Control Points (K)</span>
+                    <span id="controlPointsVal" class="mono text-purple-400">3 points (Quadratic)</span>
+                </div>
+                <input id="controlPointsSlider" type="range" min="2" max="8" step="1" value="3" class="w-full">
+                <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                    <span>2 (Linear)</span>
+                    <span>3 (Quad)</span>
+                    <span>4 (Cubic)</span>
+                    <span>8 (Order 7)</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1">Independent degrees of freedom / control vertices defining
+                    the fitted curve.</p>
+            </div>
+
+            <!-- Point Spacing (Arc Angle) -->
+            <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                    <span id="spacingLabel" class="text-slate-300 font-medium">Angular Spacing between Points</span>
+                    <span id="spacingVal" class="mono text-sky-400">14°</span>
+                </div>
+                <input id="spacingSlider" type="range" min="2" max="50" step="1" value="14" class="w-full">
+                <p id="spacingDesc" class="text-[11px] text-slate-500 mt-1">Total trail arc: 28° across 3 sample points.
+                </p>
+            </div>
+
+            <!-- Spiral / Exaggeration Factor -->
+            <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                    <span id="exaggerationLabel" class="text-slate-300 font-medium">Spiral Amplification /
+                        Exaggeration</span>
+                    <span id="exaggerationVal" class="mono text-amber-400">6.5x</span>
+                </div>
+                <input id="exaggerationSlider" type="range" min="1" max="18" step="0.5" value="6.5" class="w-full">
+            </div>
+
+            <!-- Asymmetry / Spiral Skew -->
+            <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slate-300 font-medium">Spiral Asymmetry / Tail Taper</span>
+                    <span id="skewVal" class="mono text-purple-400">0.45</span>
+                </div>
+                <input id="skewSlider" type="range" min="-0.8" max="0.8" step="0.05" value="0.45" class="w-full">
+            </div>
+
+            <!-- Orbit Speed -->
+            <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slate-300 font-medium">Orbital Velocity</span>
+                    <span id="speedVal" class="mono text-emerald-400">1.0x</span>
+                </div>
+                <input id="speedSlider" type="range" min="0" max="2.5" step="0.1" value="1.0" class="w-full">
+            </div>
+        </div>
+
+        <!-- Visual Toggles -->
+        <div class="bg-slate-950/60 border border-slate-800/90 rounded-2xl p-4 flex flex-col gap-3">
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Visual Overlays</h3>
+
+            <label class="flex items-center justify-between cursor-pointer">
+                <span class="text-xs text-slate-300">Show Construction Geometry (Control Pts / Chord)</span>
+                <input id="toggleConstruction" type="checkbox" checked class="w-4 h-4 accent-sky-400 rounded">
+            </label>
+
+            <label class="flex items-center justify-between cursor-pointer">
+                <span class="text-xs text-slate-300">Show True Circular Path Reference</span>
+                <input id="toggleOrbit" type="checkbox" checked class="w-4 h-4 accent-sky-400 rounded">
+            </label>
+
+            <label class="flex items-center justify-between cursor-pointer">
+                <span class="text-xs text-slate-300">Show Linear Segment Baseline (3-Pt Chord)</span>
+                <input id="toggleBaseline" type="checkbox" checked class="w-4 h-4 accent-sky-400 rounded">
+            </label>
+        </div>
+
+        <!-- SEO Educational Section & FAQ Accordion -->
+        <section aria-labelledby="seoGuideHeading"
+            class="bg-slate-950/60 border border-slate-800/90 rounded-2xl p-4 flex flex-col gap-3">
+            <details class="group">
+                <summary
+                    class="flex items-center justify-between cursor-pointer list-none text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-200 transition">
+                    <span id="seoGuideHeading">Algorithm Guide & FAQs</span>
+                    <span class="mono text-[10px] text-sky-400 group-open:rotate-180 transition-transform">▼</span>
+                </summary>
+                <div class="mt-3 pt-3 border-t border-slate-800 text-[11px] text-slate-300 leading-relaxed space-y-2.5">
+                    <p>
+                        <strong>Orbital Trail Curve Fitting</strong> addresses a common challenge in game physics,
+                        trajectory modeling, and real-time graphics: closely spaced sample points along a large circular
+                        trajectory produce nearly flat, collinear chords due to tiny sagitta deflection.
+                    </p>
+                    <p>
+                        By applying specialized parametric transformations (Bézier amplification, projective weighting,
+                        clothoid curvature gradients, or logarithmic spirals), developers can produce expressive,
+                        sweeping trails at minimal computational cost.
+                    </p>
+                    <h4 class="text-xs font-bold text-white pt-1">Frequently Asked Questions</h4>
+                    <div class="space-y-2">
+                        <div>
+                            <p class="font-medium text-slate-200">Why do circular orbit sample points look flat?</p>
+                            <p class="text-slate-400 text-[10px]">Short arc intervals have very low geometric deflection
+                                (\(h \approx R(1 - \cos(\Delta\theta/2))\)). Curve fitting amplifies the orthogonal
+                                normal displacement to restore dynamic curvature.</p>
+                        </div>
+                        <div>
+                            <p class="font-medium text-slate-200">Which algorithm is fastest for game development?</p>
+                            <p class="text-slate-400 text-[10px]">The <em>Amplified Quadratic Bézier</em> runs in
+                                \(O(1)\) closed form (~15 FLOPs) without expensive trigonometric solvers or matrix
+                                inversions.</p>
+                        </div>
+                        <div>
+                            <p class="font-medium text-slate-200">What is the advantage of an Euler spiral (Clothoid)?
+                            </p>
+                            <p class="text-slate-400 text-[10px]">Curvature changes linearly with arc length (\(\kappa =
+                                \kappa_0 + \alpha s\)), preventing abrupt lateral acceleration and creating smooth
+                                transitions.</p>
+                        </div>
+                    </div>
+                </div>
+            </details>
+        </section>
+
+        <!-- Play/Pause Action -->
+        <div class="flex gap-2 mt-auto pt-1">
+            <button id="playPauseBtn"
+                class="flex-1 py-2.5 px-4 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold text-xs transition shadow-lg shadow-sky-500/20">
+                Pause Orbit
+            </button>
+            <button id="stepBtn"
+                class="py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs transition border border-slate-700">
+                Step +5°
+            </button>
+        </div>
+    </aside>
+
+    <script>
+        /**
+         * Orbital Trail Curve Fitting Explorer
+         * Demonstrates 7 fast/specialized curve algorithms fitted to 3 closely spaced points
+         * sampled along a circular trajectory, turning flat arcs into dynamic spiral-like trails.
+         */
+
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Curve algorithm definitions with metadata, math descriptions, and computational cost
+        const ALGORITHMS = [
+            {
+                id: 'amplified-quad',
+                name: 'Amplified Quadratic Bézier (Spiral Skew)',
+                badge: 'O(1) Ultra-Fast',
+                badgeColor: 'emerald',
+                formula: 'C = M + k·(P₁ - M) + skew·(P₂ - P₀)',
+                desc: 'Computes chord midpoint M and amplifies the tiny circular sagitta vector (P₁ - M) by factor k, shifting it asymmetrically to create a sweeping spiral tail with ~15 FLOPs.'
+            },
+            {
+                id: 'rational-quad',
+                name: 'Rational Quadratic Bézier (Weighted)',
+                badge: 'O(1) 1 Div/Pt',
+                badgeColor: 'emerald',
+                formula: 'B(t) = [(1-t)²P₀ + 2t(1-t)w·C + t²P₂] / [(1-t)² + 2t(1-t)w + t²]',
+                desc: 'Uses homogeneous weights (w) on the middle control point to pull the trajectory sharply inward or outward, creating high peak curvature from nearly flat points.'
+            },
+            {
+                id: 'log-spiral',
+                name: 'Logarithmic Spiral Fit (r = a·e^(bθ))',
+                badge: 'Low (Polar Fit)',
+                badgeColor: 'sky',
+                formula: 'r(θ) = a · exp(b · θ)  relative to shifted spiral pole',
+                desc: 'Fits a true self-similar logarithmic spiral through the 3 points by shifting the polar origin dynamically based on the spiral tightness parameter.'
+            },
+            {
+                id: 'euler-clothoid',
+                name: 'Euler Spiral / Clothoid Approximation',
+                badge: 'Moderate (Series)',
+                badgeColor: 'amber',
+                formula: 'κ(s) = κ₀ + α·s  (Linearly varying curvature)',
+                desc: 'Models a transition spiral where curvature changes linearly along arc length—starting nearly straight near P₀ and winding tightly into the asteroid at P₂.'
+            },
+            {
+                id: 'biarc',
+                name: 'Biarc Interpolation (2 Tangent Arcs)',
+                badge: 'O(1) Closed-Form',
+                badgeColor: 'emerald',
+                formula: 'Arc₁(R_large) ∪ Arc₂(R_small) with G¹ tangent continuity',
+                desc: 'Joins P₀ to P₂ using two smoothly connected circular arcs of different radii—a wide entry radius transitioning into a tight spiral-like hook.'
+            },
+            {
+                id: 'tcb-spline',
+                name: 'Kochanek–Bartels (TCB) Spline',
+                badge: 'Low (Hermite)',
+                badgeColor: 'sky',
+                formula: 'T (Tension), C (Continuity), B (Bias) Hermite tangents',
+                desc: 'Uses negative Tension to overshoot/bulge outward and Bias to skew the curve asymmetrically, turning 3 nearly collinear points into a dramatic loop.'
+            },
+            {
+                id: 'chaikin',
+                name: 'Chaikin Corner-Cutting (Subdivision)',
+                badge: 'O(2ⁿ) Bit-Shifts',
+                badgeColor: 'emerald',
+                formula: 'Q_i = ¾P_i + ¼P_{i+1},  R_i = ¼P_i + ¾P_{i+1}',
+                desc: 'Iteratively cuts corners on an amplified control polygon using only integer shifts/additions—zero trigonometry or matrix solves.'
+            },
+            {
+                id: 'true-arc',
+                name: 'Standard Circular Arc (Baseline)',
+                badge: 'Reference',
+                badgeColor: 'slate',
+                formula: 'R = const,  κ = 1/R',
+                desc: 'Notice how closely-spaced points on a large circle look almost identical to a straight line when fitted with a standard constant-curvature arc.'
+            }
+        ];
+
+        // Simulation State
+        const state = {
+            selectedAlgo: 'amplified-quad',
+            angle: -Math.PI * 0.25,  // Current asteroid angle (P_{M-1})
+            samplePoints: 3,         // M: Number of points sampled on circular orbit
+            controlPoints: 3,        // K: Number of control points on the curve (independent)
+            spacingDeg: 14,          // Angular spacing between consecutive sample points
+            exaggeration: 6.5,       // Spiral amplification factor
+            skew: 0.45,              // Asymmetry / spiral winding bias
+            speed: 1.0,              // Orbital angular velocity multiplier
+            paused: false,
+            showConstruction: true,
+            showOrbit: true,
+            showBaseline: true,
+            stars: [],
+            width: 0,
+            height: 0
+        };
+
+        // Unicode subscript helper for node labels: P₀, P₁, P₂... C₀, C₁, C₂...
+        const subscript = (n) => String(n).split('').map(d => '₀₁₂₃₄₅₆₇₈₉'[d] || d).join('');
+
+        // Generate static background stars
+        function initStars() {
+            state.stars = [];
+            for (let i = 0; i < 110; i++) {
+                state.stars.push({
+                    x: Math.random(),
+                    y: Math.random(),
+                    r: Math.random() * 1.4 + 0.3,
+                    alpha: Math.random() * 0.6 + 0.2
+                });
+            }
+        }
+
+        // Vector helpers
+        const Vec = {
+            add: (a, b) => ({ x: a.x + b.x, y: a.y + b.y }),
+            sub: (a, b) => ({ x: a.x - b.x, y: a.y - b.y }),
+            scale: (v, s) => ({ x: v.x * s, y: v.y * s }),
+            lerp: (a, b, t) => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t }),
+            len: (v) => Math.hypot(v.x, v.y),
+            norm: (v) => {
+                const l = Math.hypot(v.x, v.y) || 1;
+                return { x: v.x / l, y: v.y / l };
+            },
+            perp: (v) => ({ x: -v.y, y: v.x }),
+            dot: (a, b) => a.x * b.x + a.y * b.y
+        };
+
+        // Stable de Casteljau evaluation of degree (K-1) Bezier curve with K control points
+        function evalBezier(ctrl, t) {
+            const p = ctrl.map(pt => ({ x: pt.x, y: pt.y }));
+            const n = p.length;
+            for (let r = 1; r < n; r++) {
+                for (let i = 0; i < n - r; i++) {
+                    p[i].x = (1 - t) * p[i].x + t * p[i + 1].x;
+                    p[i].y = (1 - t) * p[i].y + t * p[i + 1].y;
+                }
+            }
+            return p[0];
+        }
+
+        // Rational de Casteljau evaluation in homogeneous coordinates
+        function evalRationalBezier(ctrl, weights, t) {
+            const p = ctrl.map((pt, i) => ({
+                x: pt.x * weights[i],
+                y: pt.y * weights[i],
+                w: weights[i]
+            }));
+            const n = p.length;
+            for (let r = 1; r < n; r++) {
+                for (let i = 0; i < n - r; i++) {
+                    p[i].x = (1 - t) * p[i].x + t * p[i + 1].x;
+                    p[i].y = (1 - t) * p[i].y + t * p[i + 1].y;
+                    p[i].w = (1 - t) * p[i].w + t * p[i + 1].w;
+                }
+            }
+            const denom = p[0].w || 1;
+            return { x: p[0].x / denom, y: p[0].y / denom };
+        }
+
+        /**
+         * Curve Evaluator
+         * - points: M sampled points along the circular orbit (P0=tail ... P_{M-1}=head)
+         * - K = state.controlPoints: Independent number of control points (C0 ... C_{K-1})
+         */
+        function evaluateCurve(algoId, points, angles, center, radius, pointAt) {
+            const M = points.length;
+            const K = state.controlPoints;
+            const samples = 72;
+            const pts = [];
+            const helpers = [];
+
+            const P0 = points[0];
+            const P_last = points[M - 1];
+            const k = state.exaggeration;
+            const skew = state.skew;
+
+            const M_chord = Vec.lerp(P0, P_last, 0.5);
+            const chord = Vec.sub(P_last, P0);
+
+            // Compute the true sagitta apex from the circular arc between tail and head
+            const a0 = angles[0];
+            const aLast = angles[M - 1];
+            const aMid = (a0 + aLast) * 0.5;
+            const pCircMid = pointAt(aMid);
+            const sagitta = Vec.sub(pCircMid, M_chord);
+
+            // Generates K control points C0 ... C_{K-1} along the trail
+            function buildControlPoints(numK, ampK, skewVal) {
+                if (numK <= 2) {
+                    return [P0, P_last];
+                }
+                const ctrl = [P0];
+                const D = numK - 1; // Polynomial degree
+                for (let j = 1; j < D; j++) {
+                    const u = j / D;
+                    const Base_j = Vec.lerp(P0, P_last, u);
+                    const arch = 4 * u * (1 - u); // Parabolic profile peaking at 1 when u = 0.5
+                    const sagShift = Vec.scale(sagitta, arch * ampK);
+                    const skewShift = Vec.scale(chord, skewVal * (1 + (u - 0.5) * 0.6));
+                    ctrl.push(Vec.add(Vec.add(Base_j, sagShift), skewShift));
+                }
+                ctrl.push(P_last);
+                return ctrl;
+            }
+
+            switch (algoId) {
+                case 'amplified-quad': {
+                    const ctrlPts = buildControlPoints(K, k * 1.35, skew * 0.45);
+                    for (let i = 0; i <= samples; i++) {
+                        const t = i / samples;
+                        pts.push(evalBezier(ctrlPts, t));
+                    }
+                    const labels = ctrlPts.map((_, idx) => `C${subscript(idx)}`);
+                    helpers.push({
+                        type: 'control-poly',
+                        points: ctrlPts,
+                        labels,
+                        label: K === 3 ? 'Control Pt C₁' : `Control Polygon (${K} pts)`
+                    });
+                    break;
+                }
+
+                case 'rational-quad': {
+                    const ctrlPts = buildControlPoints(K, k * 1.4, skew * 0.35);
+                    const w = Math.max(0.2, 1 + (k - 1) * 0.55);
+                    const weights = ctrlPts.map((_, idx) => {
+                        if (idx === 0 || idx === K - 1) return 1.0;
+                        const u = idx / (K - 1);
+                        return 1.0 + (w - 1.0) * (4 * u * (1 - u));
+                    });
+
+                    for (let i = 0; i <= samples; i++) {
+                        const t = i / samples;
+                        pts.push(evalRationalBezier(ctrlPts, weights, t));
+                    }
+                    const labels = ctrlPts.map((_, idx) => `C${subscript(idx)}`);
+                    helpers.push({
+                        type: 'control-poly',
+                        points: ctrlPts,
+                        labels,
+                        label: K === 3 ? `Weighted C₁ (w=${w.toFixed(1)})` : `Weighted Control Polygon (${K} pts)`
+                    });
+                    break;
+                }
+
+                case 'log-spiral': {
+                    const radialOut = Vec.norm(Vec.sub(pCircMid, center));
+                    const tangent = Vec.perp(radialOut);
+                    const poleDist = radius / (1 + (k - 1) * 0.42);
+                    const spiralPole = Vec.add(
+                        Vec.sub(pCircMid, Vec.scale(radialOut, poleDist)),
+                        Vec.scale(tangent, skew * poleDist * 0.55)
+                    );
+
+                    const toPolar = (p) => {
+                        const d = Vec.sub(p, spiralPole);
+                        return { r: Vec.len(d), theta: Math.atan2(d.y, d.x) };
+                    };
+
+                    const pol0 = toPolar(P0);
+                    const polLast = toPolar(P_last);
+
+                    let dTheta = polLast.theta - pol0.theta;
+                    while (dTheta <= -Math.PI) dTheta += Math.PI * 2;
+                    while (dTheta > Math.PI) dTheta -= Math.PI * 2;
+                    if (dTheta < 0) dTheta += Math.PI * 2;
+
+                    const r0 = Math.max(5, pol0.r);
+                    const rLast = Math.max(5, polLast.r * (1 - skew * 0.45));
+                    const b = Math.log(rLast / r0) / (dTheta || 0.001);
+
+                    for (let i = 0; i <= samples; i++) {
+                        const t = i / samples;
+                        const theta = pol0.theta + t * dTheta;
+                        const spiralR = r0 * Math.exp(b * (t * dTheta));
+                        const rawPt = {
+                            x: spiralPole.x + spiralR * Math.cos(theta),
+                            y: spiralPole.y + spiralR * Math.sin(theta)
+                        };
+                        const blend = Math.pow(t, 4);
+                        pts.push(Vec.lerp(rawPt, P_last, blend * (1 - rLast / polLast.r)));
+                    }
+                    helpers.push({ type: 'pole', point: spiralPole, target: pCircMid, label: 'Spiral Pole' });
+
+                    // K guide control nodes along the fitted logarithmic spiral
+                    const guidePts = [];
+                    for (let j = 0; j < K; j++) {
+                        const idx = Math.round((j / (K - 1 || 1)) * (pts.length - 1));
+                        guidePts.push(pts[idx]);
+                    }
+                    helpers.push({
+                        type: 'control-poly',
+                        points: guidePts,
+                        labels: guidePts.map((_, idx) => `C${subscript(idx)}`),
+                        label: `Spiral Control Nodes (${K} pts)`
+                    });
+                    break;
+                }
+
+                case 'euler-clothoid': {
+                    const chordLen = Vec.len(chord);
+                    const chordDir = Vec.norm(chord);
+                    const sagDir = Vec.norm(sagitta);
+                    const sign = Vec.dot(Vec.perp(chordDir), sagDir) >= 0 ? 1 : -1;
+
+                    const totalTurn = sign * (0.25 + (k - 1) * 0.24);
+                    const skewBias = skew * 0.85;
+
+                    const rawPts = [{ x: 0, y: 0 }];
+                    let theta = 0;
+                    let x = 0, y = 0;
+                    const ds = 1 / samples;
+
+                    for (let i = 1; i <= samples; i++) {
+                        const u = (i - 0.5) / samples;
+                        const kappa = totalTurn * (1 + skewBias * (2 * u - 1));
+                        theta += kappa * ds;
+                        x += Math.cos(theta) * ds;
+                        y += Math.sin(theta) * ds;
+                        rawPts.push({ x, y });
+                    }
+
+                    const endRaw = rawPts[rawPts.length - 1];
+                    const rawLen = Vec.len(endRaw) || 1;
+                    const rawAngle = Math.atan2(endRaw.y, endRaw.x);
+                    const targetAngle = Math.atan2(chord.y, chord.x);
+                    const rot = targetAngle - rawAngle;
+                    const scale = chordLen / rawLen;
+                    const cosR = Math.cos(rot);
+                    const sinR = Math.sin(rot);
+
+                    for (const rp of rawPts) {
+                        pts.push({
+                            x: P0.x + (rp.x * cosR - rp.y * sinR) * scale,
+                            y: P0.y + (rp.x * sinR + rp.y * cosR) * scale
+                        });
+                    }
+                    helpers.push({ type: 'chord', p0: P0, p2: P_last, label: 'Clothoid Chord' });
+
+                    // K guide control nodes along the clothoid
+                    const guidePts = [];
+                    for (let j = 0; j < K; j++) {
+                        const idx = Math.round((j / (K - 1 || 1)) * (pts.length - 1));
+                        guidePts.push(pts[idx]);
+                    }
+                    helpers.push({
+                        type: 'control-poly',
+                        points: guidePts,
+                        labels: guidePts.map((_, idx) => `C${subscript(idx)}`),
+                        label: `Clothoid Control Guides (${K} pts)`
+                    });
+                    break;
+                }
+
+                case 'biarc': {
+                    const sampleSubArc = (A, B, bulgeVec, steps) => {
+                        const mid = Vec.lerp(A, B, 0.5);
+                        const apex = Vec.add(mid, bulgeVec);
+                        const d = 2 * (A.x * (apex.y - B.y) + apex.x * (B.y - A.y) + B.x * (A.y - apex.y));
+                        if (Math.abs(d) < 1e-4) {
+                            for (let i = 0; i <= steps; i++) pts.push(Vec.lerp(A, B, i / steps));
+                            return;
+                        }
+                        const aSq = A.x * A.x + A.y * A.y;
+                        const pSq = apex.x * apex.x + apex.y * apex.y;
+                        const bSq = B.x * B.x + B.y * B.y;
+                        const cx = (aSq * (apex.y - B.y) + pSq * (B.y - A.y) + bSq * (A.y - apex.y)) / d;
+                        const cy = (aSq * (B.x - apex.x) + pSq * (A.x - B.x) + bSq * (apex.x - A.x)) / d;
+                        const r = Math.hypot(A.x - cx, A.y - cy);
+
+                        let angA = Math.atan2(A.y - cy, A.x - cx);
+                        let angM = Math.atan2(apex.y - cy, apex.x - cx);
+                        let angB = Math.atan2(B.y - cy, B.x - cx);
+
+                        const normAng = (a) => {
+                            while (a <= -Math.PI) a += Math.PI * 2;
+                            while (a > Math.PI) a -= Math.PI * 2;
+                            return a;
+                        };
+                        const d1 = normAng(angM - angA);
+                        const d2 = normAng(angB - angM);
+                        const totalAng = d1 + d2;
+
+                        for (let i = 0; i <= steps; i++) {
+                            const a = angA + (i / steps) * totalAng;
+                            pts.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
+                        }
+                    };
+
+                    if (K <= 2) {
+                        const sagDir = Vec.norm(sagitta);
+                        const bulgeHeight = Vec.len(sagitta) * (k * 0.85);
+                        sampleSubArc(P0, P_last, Vec.scale(sagDir, bulgeHeight), samples);
+                        helpers.push({ type: 'chord', p0: P0, p2: P_last, label: 'Arc Chord' });
+                    } else if (K === 3) {
+                        const sagDir = Vec.norm(sagitta);
+                        const bulgeHeight = Vec.len(sagitta) * (k * 0.85);
+                        const J = Vec.add(
+                            Vec.lerp(P0, P_last, 0.5 + skew * 0.35),
+                            Vec.scale(sagDir, bulgeHeight)
+                        );
+                        const b1 = Vec.scale(sagDir, bulgeHeight * (0.28 - skew * 0.15));
+                        const b2 = Vec.scale(sagDir, bulgeHeight * (0.45 + skew * 0.25));
+                        sampleSubArc(P0, J, b1, Math.floor(samples / 2));
+                        sampleSubArc(J, P_last, b2, Math.floor(samples / 2));
+                        helpers.push({ type: 'junction', point: J, p0: P0, p2: P_last, label: 'Biarc Junction J' });
+                    } else {
+                        const ctrl = buildControlPoints(K, k * 0.85, skew * 0.35);
+                        const segSteps = Math.max(6, Math.floor(samples / (K - 1)));
+                        const sagDir = Vec.norm(sagitta);
+                        for (let s = 0; s < K - 1; s++) {
+                            const A = ctrl[s];
+                            const B = ctrl[s + 1];
+                            const u = s / (K - 2 || 1);
+                            const b = Vec.scale(sagDir, Vec.len(sagitta) * 0.3 * (1 + u * 0.5));
+                            sampleSubArc(A, B, b, segSteps);
+                            if (s > 0) {
+                                helpers.push({ type: 'junction', point: A, label: `J${subscript(s)}` });
+                            }
+                        }
+                    }
+                    break;
+                }
+
+                case 'tcb-spline': {
+                    const T = -0.35 * (k - 1);
+                    const C_param = 0.0;
+                    const B = skew;
+
+                    const ctrlNodes = buildControlPoints(K, 1 + (k - 1) * 0.45, skew * 0.35);
+
+                    if (K <= 2) {
+                        for (let i = 0; i <= samples; i++) {
+                            pts.push(Vec.lerp(ctrlNodes[0], ctrlNodes[1], i / samples));
+                        }
+                        helpers.push({ type: 'chord', p0: ctrlNodes[0], p2: ctrlNodes[1], label: 'Chord' });
+                        break;
+                    }
+
+                    const tangentsIn = [];
+                    const tangentsOut = [];
+
+                    for (let i = 0; i < K; i++) {
+                        if (i === 0) {
+                            const d0 = Vec.scale(Vec.sub(ctrlNodes[1], ctrlNodes[0]), (1 - T) * (1 + B));
+                            tangentsOut.push(d0);
+                            tangentsIn.push(d0);
+                        } else if (i === K - 1) {
+                            const dLast = Vec.scale(Vec.sub(ctrlNodes[K - 1], ctrlNodes[K - 2]), (1 - T) * (1 - B));
+                            tangentsIn.push(dLast);
+                            tangentsOut.push(dLast);
+                        } else {
+                            const dIn = Vec.add(
+                                Vec.scale(Vec.sub(ctrlNodes[i], ctrlNodes[i - 1]), 0.5 * (1 - T) * (1 + C_param) * (1 + B)),
+                                Vec.scale(Vec.sub(ctrlNodes[i + 1], ctrlNodes[i]), 0.5 * (1 - T) * (1 - C_param) * (1 - B))
+                            );
+                            const dOut = Vec.add(
+                                Vec.scale(Vec.sub(ctrlNodes[i], ctrlNodes[i - 1]), 0.5 * (1 - T) * (1 - C_param) * (1 + B)),
+                                Vec.scale(Vec.sub(ctrlNodes[i + 1], ctrlNodes[i]), 0.5 * (1 - T) * (1 + C_param) * (1 - B))
+                            );
+                            tangentsIn.push(dIn);
+                            tangentsOut.push(dOut);
+                        }
+                    }
+
+                    const evalHermite = (A, B_pt, m0, m1, steps) => {
+                        for (let i = 0; i <= steps; i++) {
+                            const t = i / steps;
+                            const t2 = t * t;
+                            const t3 = t2 * t;
+                            const h00 = 2 * t3 - 3 * t2 + 1;
+                            const h10 = t3 - 2 * t2 + t;
+                            const h01 = -2 * t3 + 3 * t2;
+                            const h11 = t3 - t2;
+                            pts.push({
+                                x: h00 * A.x + h10 * m0.x + h01 * B_pt.x + h11 * m1.x,
+                                y: h00 * A.y + h10 * m0.y + h01 * B_pt.y + h11 * m1.y
+                            });
+                        }
+                    };
+
+                    const segSteps = Math.max(6, Math.floor(samples / (K - 1)));
+                    for (let s = 0; s < K - 1; s++) {
+                        evalHermite(ctrlNodes[s], ctrlNodes[s + 1], tangentsOut[s], tangentsIn[s + 1], segSteps);
+                    }
+
+                    for (let i = 1; i < K - 1; i++) {
+                        helpers.push({
+                            type: 'tangents',
+                            p1: ctrlNodes[i],
+                            tIn: tangentsIn[i],
+                            tOut: tangentsOut[i],
+                            label: (i === 1 && K === 3) ? `Tension=${T.toFixed(2)}, Bias=${B.toFixed(2)}` : `C${subscript(i)}`
+                        });
+                    }
+                    const labels = ctrlNodes.map((_, idx) => `C${subscript(idx)}`);
+                    helpers.push({
+                        type: 'control-poly',
+                        points: ctrlNodes,
+                        labels,
+                        label: `TCB Control Nodes (${K} pts)`
+                    });
+                    break;
+                }
+
+                case 'chaikin': {
+                    const ctrlPts = buildControlPoints(K, k * 1.35, skew * 0.45);
+                    let poly = ctrlPts.map(p => ({ x: p.x, y: p.y }));
+
+                    for (let iter = 0; iter < 4; iter++) {
+                        const nextPoly = [poly[0]];
+                        for (let i = 0; i < poly.length - 1; i++) {
+                            const a = poly[i];
+                            const b = poly[i + 1];
+                            nextPoly.push({ x: 0.75 * a.x + 0.25 * b.x, y: 0.75 * a.y + 0.25 * b.y });
+                            nextPoly.push({ x: 0.25 * a.x + 0.75 * b.x, y: 0.25 * a.y + 0.75 * b.y });
+                        }
+                        nextPoly.push(poly[poly.length - 1]);
+                        poly = nextPoly;
+                    }
+                    pts.push(...poly);
+                    const labels = ctrlPts.map((_, idx) => `C${subscript(idx)}`);
+                    helpers.push({
+                        type: 'control-poly',
+                        points: ctrlPts,
+                        labels,
+                        label: `Chaikin Cage (${K} pts, 4 passes)`
+                    });
+                    break;
+                }
+
+                case 'true-arc':
+                default: {
+                    let diff = aLast - a0;
+                    while (diff <= -Math.PI) diff += Math.PI * 2;
+                    while (diff > Math.PI) diff -= Math.PI * 2;
+                    if (diff < 0) diff += Math.PI * 2;
+
+                    for (let i = 0; i <= samples; i++) {
+                        const a = a0 + (i / samples) * diff;
+                        pts.push({
+                            x: center.x + radius * Math.cos(a),
+                            y: center.y + radius * Math.sin(a)
+                        });
+                    }
+                    break;
+                }
+            }
+
+            return { points: pts, helpers };
+        }
+
+        // Resize canvas responsively for high-DPI displays
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            state.width = rect.width;
+            state.height = rect.height;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        // Render asteroid body with rocky craters and glow
+        function drawAsteroid(pos, tangentAngle) {
+            ctx.save();
+            ctx.translate(pos.x, pos.y);
+
+            // Outer atmospheric/kinetic glow
+            const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, 26);
+            glow.addColorStop(0, 'rgba(251, 191, 36, 0.9)');
+            glow.addColorStop(0.4, 'rgba(245, 158, 11, 0.35)');
+            glow.addColorStop(1, 'rgba(245, 158, 11, 0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(0, 0, 26, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Rocky polygon silhouette
+            ctx.rotate(tangentAngle * 0.5);
+            ctx.fillStyle = '#fbbf24';
+            ctx.strokeStyle = '#fef3c7';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            const vertices = 9;
+            const radii = [10, 8.5, 10.5, 9, 10, 8, 9.5, 10.2, 8.8];
+            for (let i = 0; i < vertices; i++) {
+                const a = (i / vertices) * Math.PI * 2;
+                const r = radii[i];
+                if (i === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+                else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Subtle crater details
+            ctx.fillStyle = '#b45309';
+            ctx.beginPath();
+            ctx.arc(-2.5, -2, 2.2, 0, Math.PI * 2);
+            ctx.arc(3, 2.5, 1.6, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        // Main render loop
+        function render(time) {
+            const { width, height } = state;
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw deep space radial gradient
+            const bgGrad = ctx.createRadialGradient(width * 0.5, height * 0.52, 20, width * 0.5, height * 0.52, Math.max(width, height) * 0.7);
+            bgGrad.addColorStop(0, '#0f172a');
+            bgGrad.addColorStop(1, '#060911');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, width, height);
+
+            // Starfield
+            for (const s of state.stars) {
+                ctx.fillStyle = `rgba(226, 232, 240, ${s.alpha})`;
+                ctx.beginPath();
+                ctx.arc(s.x * width, s.y * height, s.r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Orbital geometry centered slightly lower to clear top HUD
+            const center = {
+                x: width * 0.5,
+                y: height * (width < 640 ? 0.58 : 0.54)
+            };
+            const orbitRadius = Math.min(width, height) * (width < 640 ? 0.33 : 0.36);
+
+            // Central gravitational body (planet/star)
+            const sunGrad = ctx.createRadialGradient(center.x, center.y, 4, center.x, center.y, 38);
+            sunGrad.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
+            sunGrad.addColorStop(0.6, 'rgba(56, 189, 248, 0.08)');
+            sunGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+            ctx.fillStyle = sunGrad;
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, 38, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#1e293b';
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // True Circular Orbit reference ring
+            if (state.showOrbit) {
+                ctx.save();
+                ctx.strokeStyle = 'rgba(148, 163, 184, 0.22)';
+                ctx.setLineDash([5, 6]);
+                ctx.lineWidth = 1.25;
+                ctx.beginPath();
+                ctx.arc(center.x, center.y, orbitRadius, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // Sample M points along the circular orbit: P0 (oldest/tail) ... P_{M-1} (current asteroid head)
+            const M = state.samplePoints;
+            const dTheta = (state.spacingDeg * Math.PI) / 180;
+            const headAngle = state.angle;
+
+            const pointAt = (ang) => ({
+                x: center.x + orbitRadius * Math.cos(ang),
+                y: center.y + orbitRadius * Math.sin(ang)
+            });
+
+            const points = [];
+            const angles = [];
+            for (let i = 0; i < M; i++) {
+                const ang = headAngle - (M - 1 - i) * dTheta;
+                angles.push(ang);
+                points.push(pointAt(ang));
+            }
+
+            // Linear baseline chords P0 -> P1 -> ... -> P_{M-1}
+            if (state.showBaseline) {
+                ctx.save();
+                ctx.strokeStyle = 'rgba(244, 63, 94, 0.45)';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([3, 3]);
+                ctx.beginPath();
+                for (let i = 0; i < M; i++) {
+                    if (i === 0) ctx.moveTo(points[i].x, points[i].y);
+                    else ctx.lineTo(points[i].x, points[i].y);
+                }
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // Evaluate the selected curve fitting algorithm across M sample points and K control points
+            const { points: trailPts, helpers } = evaluateCurve(state.selectedAlgo, points, angles, center, orbitRadius, pointAt);
+
+            // Render construction geometry if enabled
+            if (state.showConstruction) {
+                ctx.save();
+                for (const h of helpers) {
+                    if (h.type === 'control-poly') {
+                        ctx.strokeStyle = 'rgba(168, 85, 247, 0.65)';
+                        ctx.setLineDash([4, 4]);
+                        ctx.lineWidth = 1.35;
+                        ctx.beginPath();
+                        h.points.forEach((pt, idx) => {
+                            if (idx === 0) ctx.moveTo(pt.x, pt.y);
+                            else ctx.lineTo(pt.x, pt.y);
+                        });
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+
+                        // Draw distinct purple markers for each control point C_j
+                        h.points.forEach((pt, idx) => {
+                            ctx.fillStyle = '#c084fc';
+                            ctx.strokeStyle = '#581c87';
+                            ctx.lineWidth = 1.5;
+                            ctx.beginPath();
+                            ctx.arc(pt.x, pt.y, 4.5, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.stroke();
+
+                            const label = h.labels ? h.labels[idx] : `C${subscript(idx)}`;
+                            ctx.fillStyle = '#e9d5ff';
+                            ctx.font = '600 11px "JetBrains Mono", monospace';
+                            ctx.fillText(label, pt.x + 8, pt.y - 6);
+                        });
+                    } else if (h.type === 'pole') {
+                        ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+                        ctx.setLineDash([3, 4]);
+                        ctx.beginPath();
+                        ctx.moveTo(h.point.x, h.point.y);
+                        ctx.lineTo(h.target.x, h.target.y);
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+
+                        ctx.fillStyle = '#38bdf8';
+                        ctx.beginPath();
+                        ctx.arc(h.point.x, h.point.y, 4, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.font = '11px "JetBrains Mono", monospace';
+                        ctx.fillText(h.label, h.point.x + 8, h.point.y + 4);
+                    } else if (h.type === 'junction') {
+                        ctx.fillStyle = '#34d399';
+                        ctx.beginPath();
+                        ctx.arc(h.point.x, h.point.y, 4.5, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.font = '11px "JetBrains Mono", monospace';
+                        ctx.fillText(h.label, h.point.x + 8, h.point.y - 6);
+                    } else if (h.type === 'tangents') {
+                        ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath();
+                        ctx.moveTo(h.p1.x - h.tIn.x * 0.35, h.p1.y - h.tIn.y * 0.35);
+                        ctx.lineTo(h.p1.x + h.tOut.x * 0.35, h.p1.y + h.tOut.y * 0.35);
+                        ctx.stroke();
+
+                        ctx.fillStyle = '#fbbf24';
+                        ctx.beginPath();
+                        ctx.arc(h.p1.x, h.p1.y, 4, 0, Math.PI * 2);
+                        ctx.fill();
+                        if (h.label) {
+                            ctx.font = '11px "JetBrains Mono", monospace';
+                            ctx.fillText(h.label, h.p1.x + 8, h.p1.y - 8);
+                        }
+                    } else if (h.type === 'chord') {
+                        ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+                        ctx.setLineDash([2, 4]);
+                        ctx.beginPath();
+                        ctx.moveTo(h.p0.x, h.p0.y);
+                        ctx.lineTo(h.p2.x, h.p2.y);
+                        ctx.stroke();
+                    }
+                }
+                ctx.restore();
+            }
+
+            // Draw the Tapered Luminous Trail along trailPts (P0 tail -> P_{M-1} head)
+            if (trailPts.length > 1) {
+                ctx.save();
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                // Outer glow pass
+                for (let i = 0; i < trailPts.length - 1; i++) {
+                    const t = i / (trailPts.length - 1);
+                    ctx.strokeStyle = `rgba(56, 189, 248, ${t * 0.28})`;
+                    ctx.lineWidth = 2 + t * 14;
+                    ctx.beginPath();
+                    ctx.moveTo(trailPts[i].x, trailPts[i].y);
+                    ctx.lineTo(trailPts[i + 1].x, trailPts[i + 1].y);
+                    ctx.stroke();
+                }
+
+                // Bright core plasma ribbon
+                for (let i = 0; i < trailPts.length - 1; i++) {
+                    const t = i / (trailPts.length - 1);
+                    const r = Math.round(56 + t * (253 - 56));
+                    const g = Math.round(189 + t * (224 - 189));
+                    const b = Math.round(248 + t * (71 - 248));
+                    ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.15 + t * 0.85})`;
+                    ctx.lineWidth = 1.2 + t * 5.5;
+                    ctx.beginPath();
+                    ctx.moveTo(trailPts[i].x, trailPts[i].y);
+                    ctx.lineTo(trailPts[i + 1].x, trailPts[i + 1].y);
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+
+            // Draw Sampled Points P0 through P_{M-2} on the circular orbit
+            const drawSampleNode = (pt, label, sublabel) => {
+                ctx.save();
+                ctx.fillStyle = '#0f172a';
+                ctx.strokeStyle = '#38bdf8';
+                ctx.lineWidth = 2.2;
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#e2e8f0';
+                ctx.font = '600 11px "JetBrains Mono", monospace';
+                ctx.fillText(label, pt.x + 9, pt.y - 4);
+                if (sublabel) {
+                    ctx.fillStyle = '#94a3b8';
+                    ctx.font = '10px "Inter", sans-serif';
+                    ctx.fillText(sublabel, pt.x + 9, pt.y + 8);
+                }
+                ctx.restore();
+            };
+
+            for (let i = 0; i < M - 1; i++) {
+                let sub = '';
+                if (i === 0) sub = 'Tail';
+                else if (i === Math.floor((M - 1) / 2)) sub = 'Mid';
+                drawSampleNode(points[i], `P${subscript(i)}`, sub);
+            }
+
+            // Draw Asteroid at head node P_{M-1}
+            const headPt = points[M - 1];
+            drawAsteroid(headPt, angles[M - 1] + Math.PI / 2);
+            ctx.fillStyle = '#fef3c7';
+            ctx.font = '600 11px "JetBrains Mono", monospace';
+            ctx.fillText(`P${subscript(M - 1)} (Asteroid)`, headPt.x + 14, headPt.y - 6);
+
+            // Update bottom legend text dynamically
+            const legHead = document.getElementById('legendHead');
+            if (legHead) legHead.textContent = `Asteroid (P${subscript(M - 1)} Head)`;
+            const legPts = document.getElementById('legendPoints');
+            if (legPts) {
+                legPts.textContent = M === 2
+                    ? 'Sampled Point (P₀ Tail)'
+                    : `Sampled Points (P₀ … P${subscript(M - 2)})`;
+            }
+            const legCtrl = document.getElementById('legendControl');
+            if (legCtrl) {
+                const K = state.controlPoints;
+                legCtrl.textContent = `Control Points (C₀ … C${subscript(K - 1)})`;
+            }
+        }
+
+        // Animation loop
+        let lastTime = 0;
+        function animate(now) {
+            const dt = lastTime ? Math.min((now - lastTime) / 1000, 0.05) : 0.016;
+            lastTime = now;
+
+            if (!state.paused) {
+                state.angle += dt * 0.75 * state.speed;
+            }
+
+            render(now);
+            requestAnimationFrame(animate);
+        }
+
+        // Populate sidebar algorithm selector cards
+        function buildAlgorithmUI() {
+            const container = document.getElementById('algorithmList');
+            container.innerHTML = '';
+
+            const badgeStyles = {
+                emerald: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+                sky: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+                amber: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+                slate: 'bg-slate-700/40 text-slate-300 border-slate-600/40'
+            };
+
+            ALGORITHMS.forEach((algo) => {
+                const isSelected = algo.id === state.selectedAlgo;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `text-left p-3 rounded-xl border transition flex flex-col gap-1 ${isSelected
+                        ? 'bg-sky-500/15 border-sky-400/70 shadow-md shadow-sky-950/50'
+                        : 'bg-slate-950/50 border-slate-800/90 hover:border-slate-700 hover:bg-slate-800/40'
+                    }`;
+
+                btn.innerHTML = `
+                    <div class="flex items-center justify-between gap-2 w-full">
+                        <span class="text-xs font-semibold ${isSelected ? 'text-white' : 'text-slate-200'}">${algo.name}</span>
+                        <span class="mono text-[10px] px-1.5 py-0.5 rounded-full border shrink-0 ${badgeStyles[algo.badgeColor]}">${algo.badge}</span>
+                    </div>
+                `;
+
+                btn.addEventListener('click', () => {
+                    state.selectedAlgo = algo.id;
+                    updateHUD(algo);
+                    buildAlgorithmUI();
+                });
+
+                container.appendChild(btn);
+            });
+        }
+
+        // Update floating HUD details when algorithm changes
+        function updateHUD(algo) {
+            document.getElementById('activeCurveTitle').textContent = algo.name;
+            document.getElementById('activeCurveDesc').textContent = algo.desc;
+            document.getElementById('activeFormula').textContent = algo.formula;
+            const badge = document.getElementById('costBadge');
+            badge.textContent = algo.badge;
+        }
+
+        // Bind UI controls
+        function bindControls() {
+            const samplePointsSlider = document.getElementById('samplePointsSlider');
+            const controlPointsSlider = document.getElementById('controlPointsSlider');
+            const spacingSlider = document.getElementById('spacingSlider');
+            const exaggerationSlider = document.getElementById('exaggerationSlider');
+            const skewSlider = document.getElementById('skewSlider');
+            const speedSlider = document.getElementById('speedSlider');
+
+            const getDegreeName = (K) => {
+                switch (K) {
+                    case 2: return 'Linear';
+                    case 3: return 'Quadratic';
+                    case 4: return 'Cubic';
+                    case 5: return 'Quartic';
+                    case 6: return 'Quintic';
+                    default: return `Degree ${K - 1}`;
+                }
+            };
+
+            const updateSlidersUI = () => {
+                const M = state.samplePoints;
+                const K = state.controlPoints;
+                document.getElementById('samplePointsVal').textContent = `${M} points`;
+                document.getElementById('controlPointsVal').textContent = `${K} points (${getDegreeName(K)})`;
+                const totalArc = Math.round((M - 1) * state.spacingDeg);
+                document.getElementById('spacingLabel').textContent = `${M}-Point Angular Spacing`;
+                document.getElementById('spacingDesc').textContent = `Total trail arc: ${totalArc}° across ${M} sample points.`;
+            };
+
+            samplePointsSlider.addEventListener('input', (e) => {
+                state.samplePoints = parseInt(e.target.value, 10);
+                updateSlidersUI();
+            });
+
+            controlPointsSlider.addEventListener('input', (e) => {
+                state.controlPoints = parseInt(e.target.value, 10);
+                updateSlidersUI();
+            });
+
+            spacingSlider.addEventListener('input', (e) => {
+                state.spacingDeg = parseFloat(e.target.value);
+                document.getElementById('spacingVal').textContent = `${state.spacingDeg}°`;
+                updateSlidersUI();
+            });
+
+            exaggerationSlider.addEventListener('input', (e) => {
+                state.exaggeration = parseFloat(e.target.value);
+                document.getElementById('exaggerationVal').textContent = `${state.exaggeration.toFixed(1)}x`;
+            });
+
+            skewSlider.addEventListener('input', (e) => {
+                state.skew = parseFloat(e.target.value);
+                document.getElementById('skewVal').textContent = state.skew.toFixed(2);
+            });
+
+            speedSlider.addEventListener('input', (e) => {
+                state.speed = parseFloat(e.target.value);
+                document.getElementById('speedVal').textContent = `${state.speed.toFixed(1)}x`;
+            });
+
+            document.getElementById('toggleConstruction').addEventListener('change', (e) => {
+                state.showConstruction = e.target.checked;
+            });
+
+            document.getElementById('toggleOrbit').addEventListener('change', (e) => {
+                state.showOrbit = e.target.checked;
+            });
+
+            document.getElementById('toggleBaseline').addEventListener('change', (e) => {
+                state.showBaseline = e.target.checked;
+            });
+
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            playPauseBtn.addEventListener('click', () => {
+                state.paused = !state.paused;
+                playPauseBtn.textContent = state.paused ? 'Resume Orbit' : 'Pause Orbit';
+            });
+
+            document.getElementById('stepBtn').addEventListener('click', () => {
+                state.paused = true;
+                playPauseBtn.textContent = 'Resume Orbit';
+                state.angle += (5 * Math.PI) / 180;
+            });
+
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                state.samplePoints = 3;
+                state.controlPoints = 3;
+                state.spacingDeg = 14;
+                state.exaggeration = 6.5;
+                state.skew = 0.45;
+                state.speed = 1.0;
+
+                samplePointsSlider.value = 3;
+                controlPointsSlider.value = 3;
+                spacingSlider.value = 14;
+                exaggerationSlider.value = 6.5;
+                skewSlider.value = 0.45;
+                speedSlider.value = 1.0;
+
+                document.getElementById('spacingVal').textContent = '14°';
+                document.getElementById('exaggerationVal').textContent = '6.5x';
+                document.getElementById('skewVal').textContent = '0.45';
+                document.getElementById('speedVal').textContent = '1.0x';
+                updateSlidersUI();
+            });
+
+            // Initial UI sync
+            updateSlidersUI();
+        }
+
+        // Allow scrubbing asteroid position directly on canvas with mouse/touch
+        function bindCanvasScrubbing() {
+            let isDragging = false;
+
+            const updateAngleFromPointer = (clientX, clientY) => {
+                const rect = canvas.getBoundingClientRect();
+                const center = {
+                    x: rect.width * 0.5,
+                    y: rect.height * (rect.width < 640 ? 0.58 : 0.54)
+                };
+                state.angle = Math.atan2(clientY - rect.top - center.y, clientX - rect.left - center.x);
+            };
+
+            canvas.addEventListener('pointerdown', (e) => {
+                isDragging = true;
+                state.paused = true;
+                document.getElementById('playPauseBtn').textContent = 'Resume Orbit';
+                updateAngleFromPointer(e.clientX, e.clientY);
+            });
+
+            window.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                updateAngleFromPointer(e.clientX, e.clientY);
+            });
+
+            window.addEventListener('pointerup', () => {
+                isDragging = false;
+            });
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        window.onload = () => {
+            initStars();
+            resizeCanvas();
+            buildAlgorithmUI();
+            updateHUD(ALGORITHMS[0]);
+            bindControls();
+            bindCanvasScrubbing();
+            requestAnimationFrame(animate);
+        };
+    </script>
+</body>
+
+</html>

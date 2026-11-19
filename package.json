@@ -1,0 +1,25 @@
+{
+  "name": "lineart-studio",
+  "version": "1.0.0",
+  "description": "Browser-based photo to vector line art",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "@mediapipe/face_detection": "0.4.1646425229",
+    "@techstark/opencv-js": "5.0.0-release.1",
+    "vtracer-wasm": "0.1.0"
+  },
+  "keywords": [
+    "line-art",
+    "svg",
+    "image-processing",
+    "opencv",
+    "vtracer",
+    "xdog",
+    "webassembly"
+  ]
+}
