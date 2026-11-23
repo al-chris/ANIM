@@ -63,6 +63,16 @@ const elements = {
   resultEmpty: document.getElementById('result-empty'),
   vectorCard: document.getElementById('vector-card'),
   fullscreenToggle: document.getElementById('fullscreen-toggle'),
+  traceLabel: document.getElementById('trace-label'),
+  uploadCard: document.getElementById('upload-card'),
+  stageLoading: document.getElementById('stage-loading'),
+  stageLoadingText: document.getElementById('stage-loading-text'),
+  stageProgress: document.getElementById('stage-progress'),
+  stageProgressBar: document.getElementById('stage-progress-bar'),
+  zoomControls: document.getElementById('zoom-controls'),
+  zoomIn: document.getElementById('zoom-in'),
+  zoomOut: document.getElementById('zoom-out'),
+  zoomReset: document.getElementById('zoom-reset'),
   railToast: document.getElementById('rail-toast'),
   railToastUndo: document.getElementById('rail-toast-undo'),
   vectorPreview: document.getElementById('vector-preview'),
@@ -132,6 +142,137 @@ const state = {
 function setMessage(text, isError = false) {
   elements.message.textContent = text;
   elements.message.classList.toggle('is-error', isError);
+}
+
+// Resolves after the browser has had a chance to paint. The timeout covers
+// hidden tabs, where requestAnimationFrame never fires.
+function nextPaint() {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => setTimeout(resolve, 0));
+    setTimeout(resolve, 80);
+  });
+}
+
+// Loading indicator over the artwork card. `blocking` dims the whole stage
+// (used while generating); otherwise it is a small chip that leaves the
+// artwork visible (stroke vectorizing, recording). `progress` is 0..1, or
+// null for an indeterminate bar, or undefined for no bar.
+function setStageLoading(text, { blocking = false, progress } = {}) {
+  elements.stageLoading.hidden = false;
+  elements.stageLoading.classList.toggle('is-blocking', blocking);
+  elements.stageLoadingText.textContent = text;
+  const hasBar = progress !== undefined;
+  elements.stageProgress.hidden = !hasBar;
+  elements.stageProgress.classList.toggle('is-indeterminate', hasBar && progress === null);
+  elements.stageProgressBar.style.width = hasBar && progress !== null
+    ? `${Math.round(Math.min(1, Math.max(0, progress)) * 100)}%`
+    : '';
+}
+
+function clearStageLoading() {
+  elements.stageLoading.hidden = true;
+}
+
+// ---- Canvas-only zoom & pan (drawing mode) --------------------------------
+// The transform lives on the vector viewport, so the page itself never zooms
+// or scrolls. Pointer coordinates are read from getBoundingClientRect(), which
+// already includes the transform, so drawing stays accurate at any zoom.
+const ZOOM_MIN = 1;
+const ZOOM_MAX = 8;
+const zoom = {
+  scale: 1,
+  x: 0,
+  y: 0,
+  space: false,
+  pan: null,
+  pinch: null,
+  pointers: new Map()
+};
+
+function applyZoom() {
+  const { scale, x, y } = zoom;
+  elements.vectorViewport.style.transform = scale === 1 && x === 0 && y === 0
+    ? ''
+    : `translate(${x}px, ${y}px) scale(${scale})`;
+  elements.zoomReset.textContent = `${Math.round(scale * 100)}%`;
+}
+
+function clampZoomPan() {
+  if (zoom.scale <= ZOOM_MIN) {
+    zoom.x = 0;
+    zoom.y = 0;
+    return;
+  }
+  // Always keep a margin of artwork inside the preview.
+  const keep = 48;
+  const limitX = Math.max(0, (elements.vectorViewport.offsetWidth * zoom.scale
+    + elements.vectorPreview.clientWidth) / 2 - keep);
+  const limitY = Math.max(0, (elements.vectorViewport.offsetHeight * zoom.scale
+    + elements.vectorPreview.clientHeight) / 2 - keep);
+  zoom.x = Math.min(limitX, Math.max(-limitX, zoom.x));
+  zoom.y = Math.min(limitY, Math.max(-limitY, zoom.y));
+}
+
+// Zoom so the artwork point under (clientX, clientY) stays under the cursor.
+function zoomAt(nextScale, clientX, clientY) {
+  const scale = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, nextScale));
+  if (scale === zoom.scale) return;
+  const rect = elements.vectorViewport.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2 - zoom.x;
+  const centerY = rect.top + rect.height / 2 - zoom.y;
+  const ratio = scale / zoom.scale;
+  zoom.x = clientX - centerX - ratio * (clientX - centerX - zoom.x);
+  zoom.y = clientY - centerY - ratio * (clientY - centerY - zoom.y);
+  zoom.scale = scale;
+  clampZoomPan();
+  applyZoom();
+}
+
+function zoomAtPreviewCenter(factor) {
+  const rect = elements.vectorPreview.getBoundingClientRect();
+  zoomAt(zoom.scale * factor, rect.left + rect.width / 2, rect.top + rect.height / 2);
+}
+
+function resetZoom() {
+  zoom.scale = 1;
+  zoom.x = 0;
+  zoom.y = 0;
+  zoom.pan = null;
+  zoom.pinch = null;
+  zoom.pointers.clear();
+  elements.vectorPreview.classList.remove('is-panning');
+  applyZoom();
+}
+
+function isTypingTarget(target) {
+  return Boolean(target?.closest?.('input, textarea, select, [contenteditable]'));
+}
+
+function cancelCurrentStroke() {
+  if (!state.currentStroke) return;
+  state.currentStroke = null;
+  elements.drawingCanvas.getContext('2d').clearRect(
+    0,
+    0,
+    elements.drawingCanvas.width,
+    elements.drawingCanvas.height
+  );
+}
+
+function pinchMetrics() {
+  const [a, b] = [...zoom.pointers.values()];
+  return {
+    distance: Math.hypot(a.x - b.x, a.y - b.y) || 1,
+    x: (a.x + b.x) / 2,
+    y: (a.y + b.y) / 2
+  };
+}
+
+function setGenerating(generating) {
+  elements.traceButton.classList.toggle('is-loading', generating);
+  elements.traceButton.setAttribute('aria-busy', String(generating));
+  elements.traceButton.setAttribute('aria-label', generating ? 'Generating SVG' : 'Generate SVG');
+  elements.traceLabel.textContent = generating ? 'Generating…' : 'Generate SVG';
 }
 
 function setArtworkMessage(text, isError = false) {
@@ -1294,6 +1435,8 @@ function resizeVectorStage() {
   elements.vectorViewport.style.height = `${Math.max(1, viewBox.height * scale)}px`;
   elements.drawingCanvas.width = Math.ceil(viewBox.width);
   elements.drawingCanvas.height = Math.ceil(viewBox.height);
+  clampZoomPan();
+  applyZoom();
 }
 
 function clearResult() {
@@ -1307,6 +1450,9 @@ function clearResult() {
   state.currentStroke = null;
   state.drawingMode = false;
   state.sourceRailCollapsed = false;
+  elements.zoomControls.hidden = true;
+  elements.vectorPreview.classList.remove('is-drawing');
+  resetZoom();
   if (state.webmUrl) {
     URL.revokeObjectURL(state.webmUrl);
     state.webmUrl = null;
@@ -1346,8 +1492,12 @@ async function generateSvg() {
 
   state.busy = true;
   clearResult();
+  updateButtons();
+  setGenerating(true);
   setMessage('Processing image…');
+  setStageLoading('Processing image…', { blocking: true, progress: null });
   refreshRoiCanvas();
+  await nextPaint();
   try {
     const dimensions = fitDimensions(state.image.naturalWidth, state.image.naturalHeight);
     const polygon = parsePolygon(
@@ -1357,6 +1507,14 @@ async function generateSvg() {
       dimensions.width,
       dimensions.height
     );
+    if (elements.enhanceFaces.checked) {
+      setMessage('Detecting faces…');
+      setStageLoading('Detecting faces… (the first run downloads the model)', {
+        blocking: true,
+        progress: null
+      });
+      await nextPaint();
+    }
     state.faceRegions = elements.enhanceFaces.checked
       ? await detectFaceRegions(state.image)
       : [];
@@ -1376,6 +1534,8 @@ async function generateSvg() {
       : enhancementRegions.length > 0
         ? 'Enhancing selected details and tracing…'
         : 'Tracing image…');
+    setStageLoading(elements.message.textContent, { blocking: true, progress: null });
+    await nextPaint();
     const mask = renderMask(
       state.cv,
       state.image,
@@ -1428,6 +1588,8 @@ async function generateSvg() {
     setMessage(error instanceof Error ? error.message : String(error), true);
   } finally {
     state.busy = false;
+    setGenerating(false);
+    clearStageLoading();
     updateButtons();
   }
 }
@@ -1614,7 +1776,8 @@ async function vectorizeStroke(stroke) {
   state.busy = true;
   updateButtons();
   setArtworkMessage('Vectorizing pen stroke…');
-  await new Promise((resolve) => requestAnimationFrame(resolve));
+  setStageLoading('Vectorizing stroke…');
+  await nextPaint();
 
   try {
     const viewBox = state.vectorSvg.viewBox.baseVal;
@@ -1702,6 +1865,7 @@ async function vectorizeStroke(stroke) {
     setArtworkMessage(error instanceof Error ? error.message : String(error), true);
   } finally {
     state.busy = false;
+    clearStageLoading();
     updateButtons();
   }
 }
@@ -1748,6 +1912,9 @@ function setDrawingMode(enabled) {
   mountSvg(parseSvg(state.svg));
   state.drawingMode = enabled;
   elements.drawingCanvas.hidden = !enabled;
+  elements.zoomControls.hidden = !enabled;
+  elements.vectorPreview.classList.toggle('is-drawing', enabled);
+  if (!enabled) resetZoom();
   // Keep the reference drawer available whenever artwork exists so its
   // opacity/source controls do not appear to disappear between draw sessions.
   setReferenceControlsVisible(Boolean(state.svg));
@@ -1908,6 +2075,11 @@ async function playReveal() {
   }
 }
 
+function reportRecording(label, progress) {
+  setArtworkMessage(`Recording ${label.toLowerCase()}… ${Math.round(progress * 100)}%`);
+  setStageLoading(`Recording ${label.toLowerCase()}…`, { progress });
+}
+
 async function recordAnimation() {
   if (!state.svg || state.busy) return;
   const label = animationLabel();
@@ -1920,11 +2092,9 @@ async function recordAnimation() {
     state.webmUrl = null;
   }
   setArtworkMessage(`Preparing the ${label.toLowerCase()} recording…`);
+  setStageLoading(`Preparing ${label.toLowerCase()} recording…`, { progress: null });
   // let the message paint; the timeout keeps recording from stalling when the tab is hidden (no animation frames run)
-  await new Promise((resolve) => {
-    requestAnimationFrame(resolve);
-    setTimeout(resolve, 60);
-  });
+  await nextPaint();
 
   try {
     if (isInkStyle(elements.animationStyle.value)) {
@@ -1935,9 +2105,7 @@ async function recordAnimation() {
         createInkReveal(state.svg, elements.animationStyle.value),
         duration,
         Number(elements.animationHold.value),
-        (progress) => setArtworkMessage(
-          `Recording ${label.toLowerCase()}… ${Math.round(progress * 100)}%`
-        )
+        (progress) => reportRecording(label, progress)
       );
       state.webmUrl = URL.createObjectURL(blob);
       elements.downloadWebM.href = state.webmUrl;
@@ -1951,9 +2119,7 @@ async function recordAnimation() {
       state.reveal,
       Number(elements.animationDuration.value),
       Number(elements.animationHold.value),
-      (progress) => setArtworkMessage(
-        `Recording ${label.toLowerCase()}… ${Math.round(progress * 100)}%`
-      )
+      (progress) => reportRecording(label, progress)
     );
     state.webmUrl = URL.createObjectURL(blob);
     elements.downloadWebM.href = state.webmUrl;
@@ -1963,6 +2129,7 @@ async function recordAnimation() {
     setArtworkMessage(error instanceof Error ? error.message : String(error), true);
   } finally {
     state.busy = false;
+    clearStageLoading();
     updateButtons();
   }
 }
@@ -2063,6 +2230,152 @@ elements.sourceRailToggle.addEventListener('click', () => {
 elements.sourceRailHandle.addEventListener('click', () => {
   setSourceRailCollapsed(false);
 });
+// Zoom: wheel / trackpad pinch (ctrl+wheel) zoom the canvas only.
+elements.vectorPreview.addEventListener('wheel', (event) => {
+  if (!state.drawingMode) return;
+  event.preventDefault();
+  let delta = event.deltaY;
+  if (event.deltaMode === 1) delta *= 16;
+  else if (event.deltaMode === 2) delta *= 400;
+  const speed = event.ctrlKey ? 0.01 : 0.0018;
+  zoomAt(zoom.scale * Math.exp(-delta * speed), event.clientX, event.clientY);
+}, { passive: false });
+
+// Pan: middle mouse, Space + drag, or two fingers. Registered in the capture
+// phase so a pan/pinch never starts a pen stroke.
+elements.vectorPreview.addEventListener('pointerdown', (event) => {
+  if (!state.drawingMode || event.target.closest('button, .zoom-controls')) return;
+  zoom.pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+  if (event.pointerType === 'touch' && zoom.pointers.size >= 2) {
+    event.stopPropagation();
+    event.preventDefault();
+    cancelCurrentStroke();
+    zoom.pan = null;
+    const { distance, x, y } = pinchMetrics();
+    zoom.pinch = { distance, x, y };
+    return;
+  }
+  if (event.button === 1 || (event.button === 0 && zoom.space)) {
+    event.stopPropagation();
+    event.preventDefault();
+    zoom.pan = { id: event.pointerId, x: event.clientX, y: event.clientY };
+    try {
+      elements.vectorPreview.setPointerCapture(event.pointerId);
+    } catch {
+      // The pointer ended before capture; panning still works while it moves over the preview.
+    }
+    elements.vectorPreview.classList.add('is-panning');
+  }
+}, true);
+
+elements.vectorPreview.addEventListener('pointermove', (event) => {
+  const tracked = zoom.pointers.get(event.pointerId);
+  if (tracked) {
+    tracked.x = event.clientX;
+    tracked.y = event.clientY;
+  }
+  if (zoom.pinch && zoom.pointers.size >= 2) {
+    event.stopPropagation();
+    const next = pinchMetrics();
+    zoomAt(zoom.scale * next.distance / zoom.pinch.distance, next.x, next.y);
+    zoom.x += next.x - zoom.pinch.x;
+    zoom.y += next.y - zoom.pinch.y;
+    clampZoomPan();
+    applyZoom();
+    zoom.pinch = next;
+  } else if (zoom.pan && zoom.pan.id === event.pointerId) {
+    event.stopPropagation();
+    zoom.x += event.clientX - zoom.pan.x;
+    zoom.y += event.clientY - zoom.pan.y;
+    zoom.pan.x = event.clientX;
+    zoom.pan.y = event.clientY;
+    clampZoomPan();
+    applyZoom();
+  }
+}, true);
+
+function endZoomPointer(event) {
+  zoom.pointers.delete(event.pointerId);
+  if (zoom.pinch && zoom.pointers.size < 2) zoom.pinch = null;
+  if (zoom.pan && zoom.pan.id === event.pointerId) {
+    zoom.pan = null;
+    elements.vectorPreview.classList.remove('is-panning');
+  }
+}
+elements.vectorPreview.addEventListener('pointerup', endZoomPointer, true);
+elements.vectorPreview.addEventListener('pointercancel', endZoomPointer, true);
+
+elements.zoomIn.addEventListener('click', () => zoomAtPreviewCenter(1.25));
+elements.zoomOut.addEventListener('click', () => zoomAtPreviewCenter(1 / 1.25));
+elements.zoomReset.addEventListener('click', resetZoom);
+
+function setSpaceHeld(held) {
+  zoom.space = held;
+  elements.vectorPreview.classList.toggle('is-space', held);
+}
+window.addEventListener('keydown', (event) => {
+  if (!state.drawingMode || isTypingTarget(event.target) || event.ctrlKey || event.metaKey || event.altKey) return;
+  if (event.code === 'Space' && !event.target.closest?.('button')) {
+    event.preventDefault();
+    setSpaceHeld(true);
+  } else if (event.key === '+' || event.key === '=') {
+    zoomAtPreviewCenter(1.25);
+  } else if (event.key === '-' || event.key === '_') {
+    zoomAtPreviewCenter(1 / 1.25);
+  } else if (event.key === '0') {
+    resetZoom();
+  }
+});
+window.addEventListener('keyup', (event) => {
+  if (event.code === 'Space') setSpaceHeld(false);
+});
+window.addEventListener('blur', () => setSpaceHeld(false));
+
+// Drag & drop an image onto the upload card. Dragging a file anywhere over the
+// window highlights the card (and reopens a collapsed controls drawer) so the
+// drop target is obvious; dropping elsewhere is ignored instead of making the
+// browser navigate away to the image.
+function dragHasFiles(event) {
+  return Array.from(event.dataTransfer?.types ?? []).includes('Files');
+}
+let windowDragDepth = 0;
+function clearDropHints() {
+  windowDragDepth = 0;
+  elements.uploadCard.classList.remove('is-drop-ready', 'is-dragover');
+}
+window.addEventListener('dragenter', (event) => {
+  if (!dragHasFiles(event)) return;
+  event.preventDefault();
+  windowDragDepth += 1;
+  elements.uploadCard.classList.add('is-drop-ready');
+  if (state.drawerCollapsed) setDrawerCollapsed(false, true);
+});
+window.addEventListener('dragover', (event) => {
+  if (!dragHasFiles(event)) return;
+  event.preventDefault();
+  event.dataTransfer.dropEffect = elements.uploadCard.contains(event.target) ? 'copy' : 'none';
+  elements.uploadCard.classList.toggle('is-dragover', elements.uploadCard.contains(event.target));
+});
+window.addEventListener('dragleave', () => {
+  windowDragDepth = Math.max(0, windowDragDepth - 1);
+  if (windowDragDepth === 0) clearDropHints();
+});
+window.addEventListener('drop', (event) => {
+  if (!dragHasFiles(event)) return;
+  event.preventDefault();
+  const onCard = elements.uploadCard.contains(event.target);
+  clearDropHints();
+  if (!onCard) return;
+  const files = Array.from(event.dataTransfer.files);
+  const file = files.find((item) => item.type.startsWith('image/')) ?? files[0];
+  if (state.busy) {
+    setMessage('Wait for the current job to finish before loading another image.', true);
+    return;
+  }
+  loadImage(file);
+});
+window.addEventListener('dragend', clearDropHints);
+
 let actionsHome = null;
 function toggleVectorFullscreen() {
   if (document.fullscreenElement === elements.vectorCard) {

@@ -121,10 +121,10 @@
           <p class="eyebrow">01 / SOURCE</p>
           <h1>Turn a photo into line art</h1>
           <input id="image-upload" type="file" accept="image/png,image/jpeg,image/webp">
-          <label class="upload" for="image-upload">
+          <label class="upload" id="upload-card" for="image-upload">
             <span class="upload-icon" aria-hidden="true">↑</span>
             <span id="upload-label">Choose an image</span>
-            <span class="muted">PNG, JPEG, or WebP</span>
+            <span class="muted">PNG, JPEG, or WebP · or drag &amp; drop</span>
           </label>
         </section>
 
@@ -206,7 +206,7 @@
               aria-label="Generate SVG"
               disabled
             >
-              <span>Generate SVG</span>
+              <span id="trace-label">Generate SVG</span>
               <span aria-hidden="true">↗</span>
             </button>
           </span>
@@ -220,8 +220,8 @@
             >Download SVG</button>
           </span>
           <p class="message" id="message" role="status">Choose an image to begin.</p>
-          <p class="privacy-note">Images are processed locally in your browser.</p>
         </section>
+        <p class="privacy-note">Images are processed locally in your browser.</p>
       </aside>
       <button
         class="button button-secondary drawer-handle"
@@ -292,6 +292,17 @@
                 <img id="reference-overlay" alt="" hidden>
                 <svg id="vector-svg" class="vector-art" aria-label="Generated vector line art"></svg>
                 <canvas id="drawing-canvas" hidden aria-label="Draw over the vector artwork"></canvas>
+              </div>
+              <div class="zoom-controls" id="zoom-controls" role="group" aria-label="Canvas zoom" hidden>
+                <button type="button" id="zoom-out" aria-label="Zoom out" title="Zoom out (−)">−</button>
+                <button type="button" id="zoom-reset" aria-label="Reset zoom" title="Reset zoom (0)">100%</button>
+                <button type="button" id="zoom-in" aria-label="Zoom in" title="Zoom in (+)">+</button>
+                <span class="zoom-hint">Scroll to zoom · hold Space or middle-drag to pan</span>
+              </div>
+              <div class="stage-loading" id="stage-loading" role="status" aria-live="polite" hidden>
+                <span class="spinner" aria-hidden="true"></span>
+                <span id="stage-loading-text">Working…</span>
+                <span class="stage-progress" id="stage-progress" hidden><span id="stage-progress-bar"></span></span>
               </div>
               <div class="rail-toast" id="rail-toast" role="status" hidden>
                 <span>Original hidden to give you more room.</span>
